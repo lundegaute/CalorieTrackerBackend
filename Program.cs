@@ -22,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = 
     builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING") ??
     builder.Configuration.GetConnectionString("CalorieTrackerConnection") ?? 
-    throw new InvalidOperationException("Connection string 'CalorieTrackerConnection' not found.");
+    throw new InvalidOperationException("No Connection string found.");
 builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
 
 builder.Services.AddControllers()
