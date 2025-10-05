@@ -19,9 +19,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 // Connecting to MySQL database
-var connectionString = 
+var connectionString =
     builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING") ??
-    builder.Configuration.GetConnectionString("CalorieTrackerConnection") ?? 
+    builder.Configuration.GetConnectionString("CalorieTrackerConnection") ??
     throw new InvalidOperationException("No Connection string found.");
 builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
 
@@ -144,18 +144,20 @@ var app = builder.Build();
 
 app.UseCors("AllowFrontend");
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Decide if Swagger should be enabled (always in Development, optional in Production via config flag 'EnableSwagger')
+var enableSwagger = app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool?>("EnableSwagger") == true;
+if (enableSwagger)
 {
-    app.MapOpenApi();
+    // app.MapOpenApi(); // Not required for Swashbuckle UI; uncomment if using minimal OpenAPI endpoints
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.RoutePrefix = "doc";
+        options.RoutePrefix = "doc"; // Swagger UI at /doc
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "CalorieTracker V1");
     });
 }
 
+// Use HTTPS redirection only when not in Development
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
