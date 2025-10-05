@@ -145,7 +145,7 @@ var app = builder.Build();
 app.UseCors("AllowFrontend");
 
 // Decide if Swagger should be enabled (always in Development, optional in Production via config flag 'EnableSwagger')
-var enableSwagger = app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool?>("EnableSwagger") == true;
+var enableSwagger = true;
 if (enableSwagger)
 {
     // app.MapOpenApi(); // Not required for Swashbuckle UI; uncomment if using minimal OpenAPI endpoints
