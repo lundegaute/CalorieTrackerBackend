@@ -10,14 +10,16 @@ namespace CalorieTracker.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    
     public class FoodsController : ControllerBase
     {
         private readonly FoodService _foodService;
+        private readonly FoodSqlService _foodSqlService;
 
-        public FoodsController(FoodService foodService)
+        public FoodsController(FoodService foodService, FoodSqlService foodSqlService)
         {
             _foodService = foodService;
+            _foodSqlService = foodSqlService;
         }
 
         /// <summary>
@@ -137,6 +139,54 @@ namespace CalorieTracker.Controllers
             }
             var message = await _foodService.LoadMongoDbWithMatvaretabellen(summaries);
             return Ok(message);
+        }
+
+        /// <summary>
+        /// Get all detailed foods from Matvaretabellen api, then transform it to a simple form
+        /// </summary>
+        /// <response code="200">Returns a success message</response>
+        /// <response code="500">If there is an error fetching data from the database</response>
+        [HttpGet("DetailedFoodsToSimple")]
+        public async Task<ActionResult> GetMatvaretabellenToSqlDatabase()
+        {
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("https://www.matvaretabellen.no/api/nb/foods.json");
+            if (!response.IsSuccessStatusCode)
+            {
+                return StatusCode((int)response.StatusCode, "Error fetching data from database");
+            }
+            var content = await response.Content.ReadAsStringAsync();
+
+            var foodWrapper = JsonConvert.DeserializeObject<FoodWrapper>(content);
+            var detailedFoods = foodWrapper.Foods;
+
+            var summaries = detailedFoods.Select(food =>
+            {
+                double? GetNutrient(string id)
+                {
+                    var nutrient = food.constituents
+                        .FirstOrDefault(c => c.nutrientId == id);
+                    return nutrient?.quantity;
+                }
+
+                return new FoodSummarySql
+                {
+                    Name = food.foodName,
+                    Calories = food.calories?.quantity ?? 0,
+                    Protein = GetNutrient("Protein"),
+                    Fat = GetNutrient("Fett"),
+                    Carbohydrates = GetNutrient("Karbo")
+                };
+            }).ToList();
+
+            foreach (var summary in summaries.Take(5))
+            {
+                Console.WriteLine(JsonConvert.SerializeObject(summary, Formatting.Indented));
+            }
+
+            var addFoodGetResponse = await _foodSqlService.InitializeFoodsTable(summaries);
+            
+            return Ok(addFoodGetResponse);
         }
     }
 }
