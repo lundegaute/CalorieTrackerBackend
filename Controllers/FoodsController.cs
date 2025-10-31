@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CalorieTracker.Services;
 using CalorieTracker.Models;
+using CalorieTracker.DTO;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 
@@ -10,7 +11,7 @@ namespace CalorieTracker.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    
+    //[Authorize]
     public class FoodsController : ControllerBase
     {
         private readonly FoodService _foodService;
@@ -48,7 +49,7 @@ namespace CalorieTracker.Controllers
         /// <response code="200">Returns a list of foods that match the name</response>
         /// <response code="500">If there is an error fetching data from the database</response>
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<FoodSummary>>> GetFoodFromMongoDb([FromBody] string name)
+        public async Task<ActionResult<IEnumerable<ResponseFoodDTO>>> GetFoodFromSqlDatabase([FromBody] string name)
         {
             try
             {
@@ -57,7 +58,7 @@ namespace CalorieTracker.Controllers
             }
             catch (HttpRequestException)
             {
-                return StatusCode(500, "Error fetching food from MongoDb");
+                return StatusCode(500, "Error fetching food from Database");
             }
         }
 

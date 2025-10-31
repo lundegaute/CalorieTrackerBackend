@@ -13,14 +13,16 @@ namespace CalorieTracker.Services
     {
         private readonly IMongoCollection<FoodSummary> _foodsCollection;
         private readonly IMongoCollection<Food> _detailedFoodCollection;
+        private readonly DataContext _context;
         private readonly FoodSqlService _foodSqlService;
 
-        public FoodService(IMongoClient mongoClient, IOptions<MongoDbSettingsClass> mongoDbSettings, FoodSqlService foodSqlService)
+        public FoodService(DataContext context, IMongoClient mongoClient, IOptions<MongoDbSettingsClass> mongoDbSettings, FoodSqlService foodSqlService)
         {
             var database = mongoClient.GetDatabase(mongoDbSettings.Value.DatabaseName);
             _foodsCollection = database.GetCollection<FoodSummary>("Food");
             _detailedFoodCollection = database.GetCollection<Food>("DetailedFoods");
             _foodSqlService = foodSqlService;
+            _context = context;
 
             // Ensure unique index on Name
             var indexKeys = Builders<FoodSummary>.IndexKeys.Ascending(f => f.Name);
@@ -37,39 +39,22 @@ namespace CalorieTracker.Services
             return foods;
         }
 
-        public async Task<IEnumerable<ResponseFoodDTO>> Search(string name)
+        public async Task<IEnumerable<ResponseFoodDTO>> Search(string search) // Change search to go to MySql instead of mongoDB
         {
-            var queryWords = name.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            search = search.Trim().ToLower();
+            if (string.IsNullOrEmpty(search)) return Enumerable.Empty<ResponseFoodDTO>();
+            var searchWords = search.Split(" ");
+            if (searchWords.Length == 0) return Enumerable.Empty<ResponseFoodDTO>();
 
-            var filterBuilder = Builders<FoodSummary>.Filter;
-            var filters = queryWords
-                .Select(word => filterBuilder.Regex(
-                    f => f.Name,
-                    new MongoDB.Bson.BsonRegularExpression(word, "i") // "i" = case-insensitive
-                ))
+            var allFoods = await _context.Foods.ToListAsync();
+
+            var searchedFoods = allFoods
+                .Where(food => searchWords
+                .All(word => food.Name
+                .Contains(word, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
-
-            var combinedFilter = filterBuilder.And(filters); // Example of combined filter: f => f.Name.Regex(new BsonRegularExpression("word", "i"))
-
-            var foods = await _foodsCollection
-                .Find(combinedFilter)
-                .ToListAsync();
-
-            if (foods.Count == 0) // If no food is found in MongoDB, a search in the SQL database is done for that specific name
-            {
-                var foodFromSql = await _foodSqlService.GetFood(name);
-                return [foodFromSql];
-            }
-            var foodSummarySql = foods.Select( (f, index) => new FoodSummarySql
-            {
-                Id = index + 1,
-                Name = f.Name,
-                Calories = f.Calories,
-                Protein = f.Protein,
-                Carbohydrates = f.Carbohydrates,
-                Fat = f.Fat,
-            });
-            var response = ResponseBuilder.Foods(foodSummarySql);
+            
+            var response = ResponseBuilder.Foods(searchedFoods);
             return response;
         }
 
@@ -98,7 +83,7 @@ namespace CalorieTracker.Services
 
             //var filter = Builders<FoodSummary>.Filter.Eq(f => f.Name, food.Name);
             await _foodsCollection.InsertManyAsync(foods);
-            
+
             return "Database initialized successfully";
         }
     }
