@@ -180,14 +180,10 @@ namespace CalorieTracker.Controllers
                 };
             }).ToList();
 
-            foreach (var summary in summaries.Take(5))
-            {
-                Console.WriteLine(JsonConvert.SerializeObject(summary, Formatting.Indented));
-            }
-
             var addFoodGetResponse = await _foodSqlService.InitializeFoodsTable(summaries);
-            
+
             return Ok(addFoodGetResponse);
         }
+
     }
 }

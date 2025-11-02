@@ -93,8 +93,47 @@ public class FoodSqlService
             .Where(food => !currentFoods.Contains(food.Name)).ToList();
         _context.Foods.AddRange(newFoods);
         await _context.SaveChangesAsync();
-        
+
         return "Foods added to database";
+    }
+
+    public async Task<IEnumerable<ResponseFoodDTO>> Search(string search) // Change search to go to MySql instead of mongoDB
+    {
+        search = search.Trim().ToLower();
+        if (string.IsNullOrEmpty(search)) return Enumerable.Empty<ResponseFoodDTO>();
+        var searchWords = search.Split(" ");
+        if (searchWords.Length == 0) return Enumerable.Empty<ResponseFoodDTO>();
+
+        var allFoods = await _context.Foods.ToListAsync();
+
+        var searchedFoods = allFoods
+            .Where(food => searchWords
+            .All(word => food.Name
+            .Contains(word, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        var response = ResponseBuilder.Foods(searchedFoods);
+        return response;
+    }
+
+    public async Task<ResponseFoodDTO> CreateCustomFood(AddFoodDTO customFood)
+    {
+        var foodExists = await _context.Foods.AnyAsync(f => f.Name == customFood.Name);
+        Validation.IfInDatabaseThrowException(foodExists, customFood.Name);
+
+        var foodToAdd = new FoodSummarySql
+        {
+            Name = customFood.Name,
+            Calories = customFood.Calories,
+            Protein = customFood.Protein,
+            Carbohydrates = customFood.Carbohydrates,
+            Fat = customFood.Fat,
+        };
+        await _context.Foods.AddAsync(foodToAdd);
+        await _context.SaveChangesAsync();
+        var getNewFood = await _context.Foods.FindAsync(foodToAdd.Id);
+        var response = ResponseBuilder.Foods([getNewFood!]);
+        return response.FirstOrDefault()!;
     }
 
 }
