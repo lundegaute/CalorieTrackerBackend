@@ -14,10 +14,10 @@ namespace CalorieTracker.Controllers
     //[Authorize]
     public class FoodsController : ControllerBase
     {
-        private readonly FoodService _foodService;
+        //private readonly FoodService _foodService;
         private readonly FoodSqlService _foodSqlService;
 
-        public FoodsController(FoodService foodService, FoodSqlService foodSqlService)
+        public FoodsController( FoodSqlService foodSqlService)
         {
             //_foodService = foodService;
             _foodSqlService = foodSqlService;
