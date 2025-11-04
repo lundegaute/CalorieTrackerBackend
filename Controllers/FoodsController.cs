@@ -19,9 +19,13 @@ namespace CalorieTracker.Controllers
 
         public FoodsController(FoodService foodService, FoodSqlService foodSqlService)
         {
-            _foodService = foodService;
+            //_foodService = foodService;
             _foodSqlService = foodSqlService;
         }
+
+        /*
+
+
 
         /// <summary>
         /// Gets all foods from the MongoDB database. (Only simple form: Cals, Prot, Carbs and Fat)
@@ -39,26 +43,6 @@ namespace CalorieTracker.Controllers
             catch (HttpRequestException)
             {
                 return StatusCode(500, $"Error fetching data from database");
-            }
-        }
-
-        /// <summary>
-        /// Searches for a foods that matches the given name in the MongoDB database. (Only simple form: Cals, Prot, Carbs and Fat)
-        /// </summary>
-        /// <param name="name"></param>
-        /// <response code="200">Returns a list of foods that match the name</response>
-        /// <response code="500">If there is an error fetching data from the database</response>
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<ResponseFoodDTO>>> GetFoodFromSqlDatabase([FromBody] string name)
-        {
-            try
-            {
-                var food = await _foodService.Search(name);
-                return Ok(food);
-            }
-            catch (HttpRequestException)
-            {
-                return StatusCode(500, "Error fetching food from Database");
             }
         }
 
@@ -141,6 +125,30 @@ namespace CalorieTracker.Controllers
             var message = await _foodService.LoadMongoDbWithMatvaretabellen(summaries);
             return Ok(message);
         }
+        
+        /// <summary>
+        /// Searches for a foods that matches the given name in the MongoDB database. (Only simple form: Cals, Prot, Carbs and Fat)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <response code="200">Returns a list of foods that match the name</response>
+        /// <response code="500">If there is an error fetching data from the database</response>
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<ResponseFoodDTO>>> GetFoodFromSqlDatabase([FromBody] string name)
+        {
+            try
+            {
+                var food = await _foodService.Search(name);
+                return Ok(food);
+            }
+            catch (HttpRequestException)
+            {
+                return StatusCode(500, "Error fetching food from Database");
+            }
+        }
+        
+        */
+
+
 
         /// <summary>
         /// Get all detailed foods from Matvaretabellen api, then transform it to a simple form

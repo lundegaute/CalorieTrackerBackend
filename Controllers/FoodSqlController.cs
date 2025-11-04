@@ -41,14 +41,12 @@ namespace CalorieTracker.Controllers
         /// <response code="200">Returns a food based on ID</response>
         /// <response code="400">If the food with the specified name is not found.</response>
         /// <response code="500">If there is an internal server error.</response>
-        [HttpGet("{name}")]
-        public async Task<ActionResult<ResponseFoodDTO>> GetFood(string name)
+        [HttpPost("Search")]
+        public async Task<ActionResult<ResponseFoodDTO>> GetFood([FromBody] string search)
         {
             try
             {
-                Console.WriteLine("------------------------------");
-                Console.WriteLine(name);
-                var food = await _foodSqlService.GetFood(name);
+                var food = await _foodSqlService.Search(search);
                 return Ok(food);
             }
             catch (KeyNotFoundException e)

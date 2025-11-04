@@ -119,7 +119,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<RegisterUserExample>();
 
 // Dependency Injections
-builder.Services.AddScoped<FoodService>();
+//builder.Services.AddScoped<FoodService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<MealNameService>();
 builder.Services.AddScoped<FoodSqlService>();
