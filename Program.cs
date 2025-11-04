@@ -73,16 +73,17 @@ builder.Services.AddSwaggerGen(options =>
 
 // Register MongoDB settings
 // Azure password Mongodbazure99
-builder.Services.Configure<MongoDbSettingsClass>(builder.Configuration.GetSection("MongoDbSettings"));
+//builder.Services.Configure<MongoDbSettingsClass>(builder.Configuration.GetSection("MongoDbSettings"));
 
 // Register MongoDB client
 // Add Singleton because we want to reuse the same instance across the application
+/*
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {
     var settings = sp.GetRequiredService<IOptions<MongoDbSettingsClass>>().Value;
     return new MongoClient(settings.ConnectionString);
 });
-
+*/
 
 // JWT functionality 
 builder.Services.Configure<JwtSettings>(
