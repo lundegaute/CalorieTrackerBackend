@@ -143,6 +143,22 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Auto-migrate database on startup (add this section)
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+    try
+    {
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        // Log the error but don't crash the app
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
+
 app.UseCors("AllowFrontend"); // Applying the specific CORS policy called "AllowFrontend"
 
 // Configure the HTTP request pipeline.
