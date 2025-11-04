@@ -19,9 +19,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 // Connecting to MySQL database
-var connectionString = 
+var connectionString =
     builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING") ??
-    builder.Configuration.GetConnectionString("CalorieTrackerConnection") ?? 
+    builder.Configuration.GetConnectionString("CalorieTrackerConnection") ??
     throw new InvalidOperationException("No Connection string found.");
 builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
 
@@ -132,7 +132,8 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder.WithOrigins(
-                "http://localhost:3000"
+                "http://localhost:3000", // React frontend URL for development
+                "https://calorietracker-gfh9c0bwgvc9fjaq.norwayeast-01.azurewebsites.net" // Azure App Service URL
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
@@ -142,7 +143,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
+app.UseCors("AllowFrontend"); // Applying the specific CORS policy called "AllowFrontend"
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
