@@ -19,6 +19,7 @@ namespace CalorieTracker.Services
         {
             var response = new List<ResponseMealNameDTO>();
             var mealNames = await _context.MealNames
+                .Include(mn => mn.MealPlan)
                 .Where(mn => mn.User.Id == userID)
                 .ToListAsync();
             response = ResponseBuilder.MealName(mealNames);

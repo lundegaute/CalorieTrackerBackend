@@ -130,7 +130,7 @@ namespace CalorieTracker.Controller
         }
 
         /// <summary>
-        /// Update an existing meal for the logged in user
+        /// Update a quantity in grams, for a single food item, in a single meal
         /// </summary>
         /// <response code="200">Returns a success message</response>
         /// <response code="400">If the meal ID is invalid or user ID is not found</response>
@@ -181,7 +181,7 @@ namespace CalorieTracker.Controller
             {
                 var userID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 await _mealService.DeleteFoodForUser(id, int.Parse(userID));
-                return Ok("Meal deleted successfully");
+                return Ok( new { message = "Delete successful" } );
             }
             catch (ArgumentOutOfRangeException e)
             {

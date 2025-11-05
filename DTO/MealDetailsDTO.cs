@@ -5,6 +5,7 @@ namespace CalorieTracker.DTO
     {
         public int MealId { get; set; }
         public double? Quantity { get; set; }
+        public int FoodId { get; set; }
         public string? FoodName { get; set; }
         public double? Calories { get; set; }
         public double? Protein { get; set; }

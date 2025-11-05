@@ -76,6 +76,7 @@ namespace CalorieTracker.HelperMethods
             {
                 MealId = m.Id,
                 Quantity = m.Quantity,
+                FoodId = m.Food.Id,
                 FoodName = m.Food.Name,
                 Calories = m.Food.Calories * (m.Quantity / 100d),
                 Protein = m.Food.Protein * (m.Quantity / 100d),
