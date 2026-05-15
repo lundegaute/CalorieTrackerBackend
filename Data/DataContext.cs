@@ -8,6 +8,7 @@ namespace CalorieTracker.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<FoodSummarySql> Foods { get; set; }
+        public DbSet<Food> DetailedFoods { get; set; }
         public DbSet<MealName> MealNames { get; set; }
         public DbSet<Meal> Meals { get; set; }
         public DbSet<MealPlan> MealPlans { get; set; }
