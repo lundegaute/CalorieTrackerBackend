@@ -6,7 +6,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace CalorieTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedNewPrimaryKeyInDetailedFoods : Migration
+    public partial class AddedAllDetailedModels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -87,8 +87,9 @@ namespace CalorieTracker.Migrations
                 name: "FoodConstituents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    FoodId = table.Column<string>(type: "longtext", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    DetailedFoodId = table.Column<int>(type: "int", nullable: false),
                     NutrientId = table.Column<string>(type: "varchar(255)", nullable: false),
                     Quantity = table.Column<double>(type: "double", nullable: true)
                 },
@@ -96,8 +97,8 @@ namespace CalorieTracker.Migrations
                 {
                     table.PrimaryKey("PK_FoodConstituents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FoodConstituents_DetailedFoods_Id",
-                        column: x => x.Id,
+                        name: "FK_FoodConstituents_DetailedFoods_DetailedFoodId",
+                        column: x => x.DetailedFoodId,
                         principalTable: "DetailedFoods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -106,6 +107,27 @@ namespace CalorieTracker.Migrations
                         column: x => x.NutrientId,
                         principalTable: "Nutrients",
                         principalColumn: "NutrientId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "DetailedMealPlans",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetailedMealPlans", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DetailedMealPlans_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
@@ -126,6 +148,28 @@ namespace CalorieTracker.Migrations
                         name: "FK_MealPlans_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "DetailedMeals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false),
+                    MealPlanId = table.Column<int>(type: "int", nullable: false),
+                    DetailedMealPlanId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetailedMeals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DetailedMeals_DetailedMealPlans_DetailedMealPlanId",
+                        column: x => x.DetailedMealPlanId,
+                        principalTable: "DetailedMealPlans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -154,6 +198,34 @@ namespace CalorieTracker.Migrations
                         name: "FK_MealNames_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "DetailedMealComponents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    DetailedMealId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<double>(type: "double", nullable: false),
+                    DetailedFoodId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetailedMealComponents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DetailedMealComponents_DetailedFoods_DetailedFoodId",
+                        column: x => x.DetailedFoodId,
+                        principalTable: "DetailedFoods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DetailedMealComponents_DetailedMeals_DetailedMealId",
+                        column: x => x.DetailedMealId,
+                        principalTable: "DetailedMeals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -198,6 +270,31 @@ namespace CalorieTracker.Migrations
                 table: "DetailedFoods",
                 column: "FoodName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetailedMealComponents_DetailedFoodId",
+                table: "DetailedMealComponents",
+                column: "DetailedFoodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetailedMealComponents_DetailedMealId",
+                table: "DetailedMealComponents",
+                column: "DetailedMealId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetailedMealPlans_UserId",
+                table: "DetailedMealPlans",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetailedMeals_DetailedMealPlanId",
+                table: "DetailedMeals",
+                column: "DetailedMealPlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FoodConstituents_DetailedFoodId",
+                table: "FoodConstituents",
+                column: "DetailedFoodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FoodConstituents_NutrientId",
@@ -246,10 +343,16 @@ namespace CalorieTracker.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "DetailedMealComponents");
+
+            migrationBuilder.DropTable(
                 name: "FoodConstituents");
 
             migrationBuilder.DropTable(
                 name: "Meals");
+
+            migrationBuilder.DropTable(
+                name: "DetailedMeals");
 
             migrationBuilder.DropTable(
                 name: "DetailedFoods");
@@ -262,6 +365,9 @@ namespace CalorieTracker.Migrations
 
             migrationBuilder.DropTable(
                 name: "MealNames");
+
+            migrationBuilder.DropTable(
+                name: "DetailedMealPlans");
 
             migrationBuilder.DropTable(
                 name: "MealPlans");

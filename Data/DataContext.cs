@@ -9,12 +9,19 @@ namespace CalorieTracker.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<FoodSummarySql> Foods { get; set; }
-        public DbSet<DetailedFood> DetailedFoods { get; set; }
-        public DbSet<FoodConstituent> FoodConstituents { get; set; }
-        public DbSet<Nutrient> Nutrients { get; set; }
+        public DbSet<MealPlan> MealPlans { get; set; }
         public DbSet<MealName> MealNames { get; set; }
         public DbSet<Meal> Meals { get; set; }
-        public DbSet<MealPlan> MealPlans { get; set; }
+
+
+        // Detailed Section ------------------------------------
+        public DbSet<DetailedMealPlan> DetailedMealPlans { get; set; }
+        public DbSet<DetailedMeal> DetailedMeals { get; set; }
+        public DbSet<DetailedMealComponent> DetailedMealComponents { get; set; }
+        public DbSet<DetailedFood> DetailedFoods { get; set; }
+        public DbSet<Nutrient> Nutrients { get; set; }
+        public DbSet<FoodConstituent> FoodConstituents { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,6 +71,45 @@ namespace CalorieTracker.Data
                 entity.Property(f => f.Calories).IsRequired();
             });
 
+
+            // Detailed Section ---------------------------------
+
+            modelBuilder.Entity<DetailedMealPlan>(entity =>
+            {
+                entity.HasKey(plan => plan.Id);
+
+                // Deleting mealplan will delete related meals and mealComponents but not detailedFood
+                entity.HasMany(plan => plan.DetailedMeals)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(plan => plan.User)
+                    .WithMany()
+                    .HasForeignKey(plan => plan.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<DetailedMeal>(entity =>
+            {
+                entity.HasKey(dm => dm.Id);
+
+                // If a meal is deleted, the related meal components will also be deleted
+                entity.HasMany(dm => dm.Components)
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            });
+
+            modelBuilder.Entity<DetailedMealComponent>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+                entity.Property(x => x.Quantity).IsRequired();
+
+                // Deleting a mealComponent, should not delete detailedFoods
+                entity.HasOne(x => x.DetailedFood)
+                    .WithMany()
+                    .OnDelete(DeleteBehavior.Restrict);
+                
+            });
             modelBuilder.Entity<DetailedFood>(entity =>
             {
                 entity.HasKey(df => df.Id);
@@ -97,6 +143,8 @@ namespace CalorieTracker.Data
                     .HasForeignKey(f => f.NutrientId);
             });
 
+
+            // User Section ---------------------------------------------
 
             modelBuilder.Entity<User>(entity =>
             {

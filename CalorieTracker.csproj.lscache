@@ -86,11 +86,15 @@ HelperMethods/
  ResponseBuilder.cs
  Validation.cs
 Migrations/
- 20260519063621_AddedNewPrimaryKeyInDetailedFoods.cs
- 20260519063621_AddedNewPrimaryKeyInDetailedFoods.Designer.cs
- 20260519064910_DebugedNewIdForDetailedFood.cs
- 20260519064910_DebugedNewIdForDetailedFood.Designer.cs
+ 20260519130941_AddedAllDetailedModels.cs
+ 20260519130941_AddedAllDetailedModels.Designer.cs
+ 20260519131535_BugFixDetailedMealTable.cs
+ 20260519131535_BugFixDetailedMealTable.Designer.cs
  DataContextModelSnapshot.cs
+Models/Detailed/
+ DetailedMeal.cs
+ DetailedMealComponent.cs
+ DetailedMealPlan.cs
 Models/
  Foods.cs
  FoodSummary.cs
