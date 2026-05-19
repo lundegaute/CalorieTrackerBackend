@@ -55,8 +55,10 @@ TemporaryDependencyNodeTargetIdentifier=net9.0
 
 [sourceFiles]
 Configuration/JwtSettings.cs
-Controllers/
+Controllers/DetailedControllers/
  DetailedFoodController.cs
+ DetailedMealPlanController.cs
+Controllers/
  FoodsController.cs
  FoodSqlController.cs
  MealController.cs
@@ -108,10 +110,14 @@ obj/Debug/net9.0/
  CalorieTracker.AssemblyInfo.cs
  CalorieTracker.GlobalUsings.g.cs
 Program.cs
-Repository/FoodRepository.cs
+Repository/
+ DetailedMealPlanRepository.cs
+ FoodRepository.cs
 Services/
  AuthService.cs
- DetailedFoodService.cs
+ DetailedServices/
+  DetailedFoodService.cs
+  DetailedMealPlanService.cs
  FoodService.cs
  FoodSqlService.cs
  MealNameService.cs

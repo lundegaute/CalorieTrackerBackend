@@ -5,6 +5,7 @@ using CalorieTracker.Data;
 using CalorieTracker.DTO.Requests;
 using CalorieTracker.Models;
 
+namespace CalorieTracker.Repositories;
 public class FoodRepository
 {
     private readonly DataContext _context;
