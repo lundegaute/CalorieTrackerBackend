@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using CalorieTracker.Services;
 using CalorieTracker.HelperMethods;
 using CalorieTracker.DTO;
+using CalorieTracker.DTO.Requests;
 
 namespace CalorieTracker.Services
 {

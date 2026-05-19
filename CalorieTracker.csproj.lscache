@@ -56,6 +56,7 @@ TemporaryDependencyNodeTargetIdentifier=net9.0
 [sourceFiles]
 Configuration/JwtSettings.cs
 Controllers/
+ DetailedFoodController.cs
  FoodsController.cs
  FoodSqlController.cs
  MealController.cs
@@ -66,12 +67,16 @@ Data/
  DataContext.cs
  MongoDbSettings.cs
 DTO/
+ ApiResponse.cs
  FoodDTO.cs
  MealDetailsDTO.cs
  MealDTO.cs
  MealNameDTO.cs
  MealPlanDTO.cs
  MealSummaryDTO.cs
+ Requests/
+  MatvareTabellen.cs
+  MatvareTabellenNutrients.cs
  UserDTO.cs
 Extensions/
  HttpExtensions.cs
@@ -81,20 +86,10 @@ HelperMethods/
  ResponseBuilder.cs
  Validation.cs
 Migrations/
- 20250706190535_InitialCreate.cs
- 20250706190535_InitialCreate.Designer.cs
- 20250714073152_AddUniqueIndexToFoodName.cs
- 20250714073152_AddUniqueIndexToFoodName.Designer.cs
- 20250717080208_UpdateMealNameCascadeDelete.cs
- 20250717080208_UpdateMealNameCascadeDelete.Designer.cs
- 20250819164157_AddedMealPlanTable.cs
- 20250819164157_AddedMealPlanTable.Designer.cs
- 20250819165041_RestartDatabase.cs
- 20250819165041_RestartDatabase.Designer.cs
- 20250820153441_AddedUserFKToMealPlan.cs
- 20250820153441_AddedUserFKToMealPlan.Designer.cs
- 20250911125147_AddUserIdToMealPlan.cs
- 20250911125147_AddUserIdToMealPlan.Designer.cs
+ 20260519063621_AddedNewPrimaryKeyInDetailedFoods.cs
+ 20260519063621_AddedNewPrimaryKeyInDetailedFoods.Designer.cs
+ 20260519064910_DebugedNewIdForDetailedFood.cs
+ 20260519064910_DebugedNewIdForDetailedFood.Designer.cs
  DataContextModelSnapshot.cs
 Models/
  Foods.cs
@@ -112,6 +107,7 @@ Program.cs
 Repository/FoodRepository.cs
 Services/
  AuthService.cs
+ DetailedFoodService.cs
  FoodService.cs
  FoodSqlService.cs
  MealNameService.cs

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CalorieTracker.Services;
 using CalorieTracker.Models;
-using CalorieTracker.DTO;
+using CalorieTracker.DTO.Requests;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CalorieTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250819164157_AddedMealPlanTable")]
-    partial class AddedMealPlanTable
+    [Migration("20260519064910_DebugedNewIdForDetailedFood")]
+    partial class DebugedNewIdForDetailedFood
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,64 @@ namespace CalorieTracker.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("CalorieTracker.Models.DetailedFood", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("FoodGroupId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FoodId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("FoodName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("SearchKeywords")
+                        .IsRequired()
+                        .HasColumnType("LONGTEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FoodId")
+                        .IsUnique();
+
+                    b.HasIndex("FoodName")
+                        .IsUnique();
+
+                    b.ToTable("DetailedFoods");
+                });
+
+            modelBuilder.Entity("CalorieTracker.Models.FoodConstituent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("DetailedFoodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NutrientId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<double?>("Quantity")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailedFoodId");
+
+                    b.HasIndex("NutrientId");
+
+                    b.ToTable("FoodConstituents");
+                });
 
             modelBuilder.Entity("CalorieTracker.Models.FoodSummarySql", b =>
                 {
@@ -114,9 +172,31 @@ namespace CalorieTracker.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("MealPlans");
+                });
+
+            modelBuilder.Entity("CalorieTracker.Models.Nutrient", b =>
+                {
+                    b.Property<string>("NutrientId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("DefaultUnit")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NutrientName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("NutrientId");
+
+                    b.ToTable("Nutrients");
                 });
 
             modelBuilder.Entity("CalorieTracker.Models.User", b =>
@@ -144,6 +224,70 @@ namespace CalorieTracker.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CalorieTracker.Models.DetailedFood", b =>
+                {
+                    b.OwnsOne("CalorieTracker.Models.DbCalories", "Calories", b1 =>
+                        {
+                            b1.Property<int>("DetailedFoodId")
+                                .HasColumnType("int");
+
+                            b1.Property<int?>("Quantity")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Unit")
+                                .HasColumnType("longtext");
+
+                            b1.HasKey("DetailedFoodId");
+
+                            b1.ToTable("DetailedFoods");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DetailedFoodId");
+                        });
+
+                    b.OwnsOne("CalorieTracker.Models.DbEnergy", "Energy", b1 =>
+                        {
+                            b1.Property<int>("DetailedFoodId")
+                                .HasColumnType("int");
+
+                            b1.Property<double?>("Quantity")
+                                .HasColumnType("double");
+
+                            b1.Property<string>("Unit")
+                                .HasColumnType("longtext");
+
+                            b1.HasKey("DetailedFoodId");
+
+                            b1.ToTable("DetailedFoods");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DetailedFoodId");
+                        });
+
+                    b.Navigation("Calories");
+
+                    b.Navigation("Energy");
+                });
+
+            modelBuilder.Entity("CalorieTracker.Models.FoodConstituent", b =>
+                {
+                    b.HasOne("CalorieTracker.Models.DetailedFood", "Food")
+                        .WithMany()
+                        .HasForeignKey("DetailedFoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CalorieTracker.Models.Nutrient", "Nutrient")
+                        .WithMany()
+                        .HasForeignKey("NutrientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Food");
+
+                    b.Navigation("Nutrient");
                 });
 
             modelBuilder.Entity("CalorieTracker.Models.Meal", b =>
@@ -184,6 +328,17 @@ namespace CalorieTracker.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CalorieTracker.Models.MealPlan", b =>
+                {
+                    b.HasOne("CalorieTracker.Models.User", "User")
+                        .WithMany("MealPlans")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CalorieTracker.Models.FoodSummarySql", b =>
                 {
                     b.Navigation("Meals");
@@ -202,6 +357,8 @@ namespace CalorieTracker.Migrations
             modelBuilder.Entity("CalorieTracker.Models.User", b =>
                 {
                     b.Navigation("MealNames");
+
+                    b.Navigation("MealPlans");
                 });
 #pragma warning restore 612, 618
         }

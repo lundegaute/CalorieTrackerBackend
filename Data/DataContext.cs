@@ -1,3 +1,4 @@
+using System.Text.Json;
 using CalorieTracker.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,9 @@ namespace CalorieTracker.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<FoodSummarySql> Foods { get; set; }
-        public DbSet<Food> DetailedFoods { get; set; }
+        public DbSet<DetailedFood> DetailedFoods { get; set; }
+        public DbSet<FoodConstituent> FoodConstituents { get; set; }
+        public DbSet<Nutrient> Nutrients { get; set; }
         public DbSet<MealName> MealNames { get; set; }
         public DbSet<Meal> Meals { get; set; }
         public DbSet<MealPlan> MealPlans { get; set; }
@@ -60,6 +63,41 @@ namespace CalorieTracker.Data
                 entity.Property(f => f.Fat).IsRequired();
                 entity.Property(f => f.Calories).IsRequired();
             });
+
+            modelBuilder.Entity<DetailedFood>(entity =>
+            {
+                entity.HasKey(df => df.Id);
+                entity.HasIndex(df => df.FoodId).IsUnique();
+                entity.HasIndex(df => df.FoodName).IsUnique();
+
+                entity.OwnsOne(df => df.Energy);
+                entity.OwnsOne(df => df.Calories);
+
+                entity.Property(df => df.SearchKeywords)
+                    .HasColumnType("LONGTEXT") // Stores it as long text in MySQL
+                    .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null), // C# List -> JSON String
+                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null) ?? new List<string>() // JSON String -> C# List
+          );
+            });
+            modelBuilder.Entity<Nutrient>(entity =>
+            {
+                entity.HasKey(n => n.NutrientId);
+            });
+            modelBuilder.Entity<FoodConstituent>(entity =>
+            {
+                entity.HasKey(f => f.Id);
+                
+                entity.HasOne(f => f.Food)
+                    .WithMany()
+                    .HasForeignKey(f => f.DetailedFoodId);
+
+                entity.HasOne(f => f.Nutrient)
+                    .WithMany()
+                    .HasForeignKey(f => f.NutrientId);
+            });
+
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);

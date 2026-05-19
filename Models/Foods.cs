@@ -1,44 +1,53 @@
 // Food myDeserializedClass = JsonConvert.DeserializeObject<Food>(myJsonResponse);
 // This file is to fetch advanced data from Matvaretabellen API
-namespace CalorieTracker.Models
+namespace CalorieTracker.Models;
+
+
+public class DetailedFood
 {
-    public class Calories
-    {
-        public string sourceId { get; set; }
-        public int? quantity { get; set; }
-        public string unit { get; set; }
-    }
+    public int Id { get; set; }
+    public string FoodId { get; set;}
+    public string FoodName { get; set;}
+    public string FoodGroupId { get; set;}
+    
+    public DbCalories? Calories { get; set;}
+    public DbEnergy? Energy { get; set; }
 
-    public class Constituent
-    {
-        public string sourceId { get; set; }
-        public string nutrientId { get; set; }
-        public double? quantity { get; set; }
-        public string unit { get; set; }
-    }
+    public List<string> SearchKeywords { get; set; }
 
-    public class Energy
-    {
-        public string sourceId { get; set; }
-        public double quantity { get; set; }
-        public string unit { get; set; }
-    }
-
-    public class Food
-    {
-        public List<string> searchKeywords { get; set; }
-        public Calories calories { get; set; }
-        public Energy energy { get; set; }
-        public string foodName { get; set; }
-        public List<Constituent> constituents { get; set; }
-        public string uri { get; set; }
-        public string foodGroupId { get; set; }
-        public string foodId { get; set; }
-    }
-
-    public class FoodWrapper
-    {
-        public List<Food> Foods { get; set; }
-    }
 }
+
+public class Nutrient
+{
+    public string NutrientId { get; set; }
+    public string NutrientName { get; set; }
+    public string? DefaultUnit { get; set;}
+}
+
+public class DbCalories
+{
+    public int? Quantity { get; set; }
+    public string? Unit { get; set; }
+
+}
+public class DbEnergy
+{
+    public double? Quantity { get; set; }
+    public string? Unit { get; set; }
+}
+
+public class FoodConstituent
+{
+    public int Id { get; set; }
+    
+    public int DetailedFoodId { get; set; }
+    public DetailedFood Food { get; set; }
+
+    public string NutrientId { get; set; }
+    public Nutrient Nutrient { get; set; }
+
+
+    public double? Quantity { get; set; }
+}
+
 
