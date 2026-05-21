@@ -57,6 +57,7 @@ TemporaryDependencyNodeTargetIdentifier=net9.0
 Configuration/JwtSettings.cs
 Controllers/DetailedControllers/
  DetailedFoodController.cs
+ DetailedMealController.cs
  DetailedMealPlanController.cs
 Controllers/
  FoodsController.cs
@@ -70,6 +71,10 @@ Data/
  MongoDbSettings.cs
 DTO/
  ApiResponse.cs
+ Detailed/
+  DetailedMealComponentDTO.cs
+  DetailedMealDTO.cs
+  DetailedMealPlanDTO.cs
  FoodDTO.cs
  MealDetailsDTO.cs
  MealDTO.cs
@@ -83,10 +88,12 @@ DTO/
 Extensions/
  HttpExtensions.cs
  RepositoryExtensions.cs
+ ServiceExtensions.cs
 HelperMethods/
  GenericResponseClass.cs
  ResponseBuilder.cs
  Validation.cs
+Middleware/GlobalExceptionHandler.cs
 Migrations/
  20260519130941_AddedAllDetailedModels.cs
  20260519130941_AddedAllDetailedModels.Designer.cs
@@ -112,12 +119,14 @@ obj/Debug/net9.0/
 Program.cs
 Repository/
  DetailedMealPlanRepository.cs
+ DetailedMealRepository.cs
  FoodRepository.cs
 Services/
  AuthService.cs
  DetailedServices/
   DetailedFoodService.cs
   DetailedMealPlanService.cs
+  DetailedMealService.cs
  FoodService.cs
  FoodSqlService.cs
  MealNameService.cs

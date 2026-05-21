@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using CalorieTracker.DTO;
 using CalorieTracker.DTO.Requests;
 using CalorieTracker.Models;
+using CalorieTracker.Services;
 
 namespace CalorieTracker.Controllers;
 
@@ -20,7 +21,7 @@ public class DetailedFoodController : ControllerBase
     }
 
     /// <summary>
-    /// Fills database with data from matvaretabellen, returning a string with how many rows added to each table
+    /// Fills database with detailed data from matvaretabellen, returning a string with how many rows added to each table
     /// </summary>
     /// <response code="200">Returns an ApiResponse with metadata.</response>
     /// <response code="500">If there is an internal server error.</response>

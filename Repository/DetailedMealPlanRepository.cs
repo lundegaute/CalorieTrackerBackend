@@ -1,9 +1,9 @@
-
+using Microsoft.EntityFrameworkCore;
 using CalorieTracker.Data;
 using CalorieTracker.Models;
 
 
-namespace CalorieTracker.Repository;
+namespace CalorieTracker.Repositories;
 
 public class DetailedMealPlanRepository
 {
@@ -14,5 +14,37 @@ public class DetailedMealPlanRepository
         _context = context;
     }
 
-    
+    // Gets the entire MealPlans -> meals -> mealcomponents -> foods, for current user
+    public async Task<List<DetailedMealPlan>> GetEntireDetailedMealPlan(int userID)
+    {
+        var detailedMealPlans = await _context.DetailedMealPlans
+            .Include(mp => mp.DetailedMeals)
+                .ThenInclude(m => m.Components)
+                    .ThenInclude(c => c.DetailedFood)
+            .Where(mp => mp.UserId == userID)
+            .ToListAsync();
+        
+        return detailedMealPlans;
+
+    }
+
+    public async Task<List<DetailedMealPlan>> GetDetailedMealPlansAsync(int userID)
+    {
+        var mealPlans = await _context.DetailedMealPlans
+            .Where(mp => mp.UserId == userID)
+            .ToListAsync();
+
+        return mealPlans;
+    }
+
+    public async Task<List<int>> GetUserDetailedMealPlanIdsAsync(int userID)
+    {
+        var detailedMealPlanIds = await _context.DetailedMealPlans
+            .Where(mp => mp.UserId == userID)
+            .Select(mp => mp.Id)
+            .ToListAsync();
+        
+        return detailedMealPlanIds;
+    }
+
 }

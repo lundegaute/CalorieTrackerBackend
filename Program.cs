@@ -1,22 +1,20 @@
-using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
-using CalorieTracker.Data;
-using CalorieTracker.Services;
-using System.Reflection;
-using System.Text.Json.Serialization;
-using CalorieTracker.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using System.Reflection;
+using System.Text;
+using Swashbuckle.AspNetCore.Filters;
+using CalorieTracker.Configuration;
+using CalorieTracker.Middleware;
+using CalorieTracker.Data;
+using CalorieTracker.Seed;
+
 using CalorieTracker.SwaggerExamples;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 // Connecting to MySQL database
 var connectionString =
@@ -120,14 +118,9 @@ builder.Services.AddSwaggerExamplesFromAssemblyOf<RegisterUserExample>();
 
 // Dependency Injections
 //builder.Services.AddScoped<FoodService>();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<MealNameService>();
-builder.Services.AddScoped<FoodSqlService>();
-builder.Services.AddScoped<MealService>();
-builder.Services.AddScoped<MealPlanService>();
 builder.Services.AddMyHttpExtensions();
 builder.Services.AddMyRepositoryExtensions();
-builder.Services.AddScoped<DetailedFoodService>();
+builder.Services.AddMyServiceExtensions();
 
 // Adding CORS policy to allow requests from the frontend
 builder.Services.AddCors(options =>
@@ -154,6 +147,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         context.Database.Migrate();
+        await DetailedSeed.SeedDevelopmentData(context);
+
     }
     catch (Exception ex)
     {
@@ -164,6 +159,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseCors("AllowFrontend"); // Applying the specific CORS policy called "AllowFrontend"
+
+app.UseMiddleware<GlobalExceptionHandler>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
