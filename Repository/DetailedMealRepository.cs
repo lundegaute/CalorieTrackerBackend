@@ -11,15 +11,5 @@ public class DetailedMealRepository
     {
         _context = context;
     }
-
-    public async Task<List<DetailedMeal>> GetDetailedMealsAsync(int mealPlanID)
-    { 
-
-        var detailedMeals = await _context.DetailedMeals
-            .Where(dm => dm.DetailedMealPlanId == mealPlanID)
-            .ToListAsync();
-
-        return detailedMeals;
-    }
     
 }

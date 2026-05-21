@@ -88,6 +88,7 @@ namespace CalorieTracker.Data
                     .HasForeignKey(plan => plan.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
             modelBuilder.Entity<DetailedMeal>(entity =>
             {
                 entity.HasKey(dm => dm.Id);
@@ -110,6 +111,7 @@ namespace CalorieTracker.Data
                     .OnDelete(DeleteBehavior.Restrict);
                 
             });
+
             modelBuilder.Entity<DetailedFood>(entity =>
             {
                 entity.HasKey(df => df.Id);
@@ -119,30 +121,33 @@ namespace CalorieTracker.Data
                 entity.OwnsOne(df => df.Energy);
                 entity.OwnsOne(df => df.Calories);
 
+                entity.HasMany(df => df.FoodConstituents)
+                    .WithOne()
+                    .HasForeignKey(fc => fc.DetailedFoodId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                
                 entity.Property(df => df.SearchKeywords)
                     .HasColumnType("LONGTEXT") // Stores it as long text in MySQL
                     .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null), // C# List -> JSON String
                     v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null) ?? new List<string>() // JSON String -> C# List
-          );
+                    );
+          
             });
-            modelBuilder.Entity<Nutrient>(entity =>
-            {
-                entity.HasKey(n => n.NutrientId);
-            });
+            
             modelBuilder.Entity<FoodConstituent>(entity =>
             {
                 entity.HasKey(f => f.Id);
-                
-                entity.HasOne(f => f.Food)
-                    .WithMany()
-                    .HasForeignKey(f => f.DetailedFoodId);
 
                 entity.HasOne(f => f.Nutrient)
                     .WithMany()
                     .HasForeignKey(f => f.NutrientId);
             });
 
+            modelBuilder.Entity<Nutrient>(entity =>
+            {
+                entity.HasKey(n => n.NutrientId);
+            });
 
             // User Section ---------------------------------------------
 

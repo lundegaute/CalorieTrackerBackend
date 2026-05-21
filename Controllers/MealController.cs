@@ -26,7 +26,7 @@ namespace CalorieTracker.Controller
         /// </summary>
         /// <response code="200">Returns a list of meals for logged in user</response>
         /// <response code="400">If the user ID is not found or invalid</response>
-        /// <response code="500">If there is a server error while fetching meals</response
+        /// <response code="500">If there is a server error while fetching meals</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MealSummaryDTO>>> GetMealsForUser()
         {

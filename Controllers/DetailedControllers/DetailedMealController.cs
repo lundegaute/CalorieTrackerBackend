@@ -19,20 +19,4 @@ public class DetailedMealController : ControllerBase
     }
 
 
-    [AllowAnonymous]
-    [HttpGet("{mealPlanId}")]
-    public async Task<ActionResult<ApiResponse<List<DetailedMealDTO>>>> GetDetailedMeals([FromRoute] int mealPlanId)
-    {
-        // This method validates userID
-        int userID = User.GetUserId();
-
-        if ( int.IsNegative(mealPlanId))
-        {
-            return ApiResponse<List<DetailedMealDTO>>.Failure(["MealPlanID can not be a negative number"], ["BadRequest"], 400);
-        }
-
-        var response = await _detailedMealService.GetDetailedMeals(userID, mealPlanId);
-        return Ok(response);
-
-    }
 }

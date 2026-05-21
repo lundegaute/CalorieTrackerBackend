@@ -14,6 +14,7 @@ public class DetailedFood
     public DbEnergy? Energy { get; set; }
 
     public List<string> SearchKeywords { get; set; }
+    public List<FoodConstituent> FoodConstituents { get; set; }
 
 }
 
@@ -41,7 +42,7 @@ public class FoodConstituent
     public int Id { get; set; }
     
     public int DetailedFoodId { get; set; }
-    public DetailedFood Food { get; set; }
+    //public DetailedFood Food { get; set; } This is not needed. But maybe is
 
     public string NutrientId { get; set; }
     public Nutrient Nutrient { get; set; }

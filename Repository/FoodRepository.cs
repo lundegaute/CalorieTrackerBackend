@@ -92,7 +92,7 @@ public class FoodRepository
 
                     var newFoodConstituent = new FoodConstituent
                     {
-                        Food = addFood,
+                        DetailedFoodId = addFood.Id,
                         NutrientId = nutrient.nutrientId,
                         Quantity = nutrient.quantity ?? null,
                     };

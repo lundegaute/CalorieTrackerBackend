@@ -19,16 +19,11 @@ public class DetailedMealPlanService
     {
         var mealPlans = await _detailedMealPlanRepository.GetEntireDetailedMealPlan(userID);
 
-        var mealPlanDTOs = mealPlans.Select(plan => new DetailedMealPlanDTO
-        {
-            Id = plan.Id,
-            Name = plan.Name,
-            UserId = plan.UserId
-        });
+        // Create MealPlanDTO here
 
-        var response = ApiResponse<List<DetailedMealPlanDTO>>.Success(mealPlanDtos, 200);
+        var response = ApiResponse<List<DetailedMealPlanDTO>>.Success([], 200);
 
-        return respons;
+        return response;
     }
 
 

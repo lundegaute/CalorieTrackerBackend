@@ -38,11 +38,11 @@ public class DetailedFoodDTO
     public int Calories { get; set;} // 369Kcals
     public double Energy { get; set; }
 
-    public List<FoodNutrientDTO> Nutrients { get; set; }
+    public List<FoodConstituentDTO> Constituents { get; set; }
 
 }
 
-public class FoodNutrientDTO
+public class FoodConstituentDTO
 {
     public int Id { get; set; }
     public string NutrientId { get; set; }
