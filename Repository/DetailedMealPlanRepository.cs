@@ -18,9 +18,12 @@ public class DetailedMealPlanRepository
     public async Task<List<DetailedMealPlan>> GetEntireDetailedMealPlan(int userID)
     {
         var detailedMealPlans = await _context.DetailedMealPlans
+            .AsNoTracking()
             .Include(mp => mp.DetailedMeals)
                 .ThenInclude(m => m.Components)
                     .ThenInclude(c => c.DetailedFood)
+                        .ThenInclude(f => f.FoodConstituents)
+                            .ThenInclude(fc => fc.Nutrient)
             .Where(mp => mp.UserId == userID)
             .ToListAsync();
         

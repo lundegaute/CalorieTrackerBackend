@@ -20,8 +20,8 @@ public class DetailedMealPlanController : ControllerBase
     }
 
 
-    [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<DetailedMealPlanDTO>>>> GetEntireDetailedMealPlan()
+    [HttpGet("overview")]
+    public async Task<ActionResult<ApiResponse<List<DetailedCompleteOverviewDTO>>>> GetEntireDetailedMealPlan()
     {
         var userID = User.GetUserId();
 
@@ -29,16 +29,6 @@ public class DetailedMealPlanController : ControllerBase
 
         return Ok(response);
 
-    }
-
-    [HttpGet("mealplans")]
-    public async Task<ActionResult<ApiResponse<List<DetailedMealPlanDTO>>>> GetDetailedMealPlans()
-    {
-        int userID = User.GetUserId();
-        
-        var apiResponse = await _detailedMealPlanService.GetDetailedMealPlans( userID );
-
-        return Ok( apiResponse );
     }
 
     

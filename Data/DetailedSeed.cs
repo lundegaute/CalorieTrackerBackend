@@ -7,8 +7,11 @@ public static class DetailedSeed
 {
     public async static Task SeedDevelopmentData(DataContext _context)
     {
-        if ( await _context.DetailedMealPlans.AnyAsync() ) 
+        if ( await _context.DetailedMealPlans.AnyAsync())
+        {
+            Console.WriteLine("Database already initialized with required data"); 
             return;
+        }
 
         var user = await _context.Users.FirstOrDefaultAsync();
         if ( user is null ) 
