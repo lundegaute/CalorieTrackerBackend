@@ -19,6 +19,15 @@ public class DetailedMealPlanController : ControllerBase
         _detailedMealPlanService = detailedMealPlanService;
     }
 
+    [HttpPost("add")]
+    public async Task<ActionResult<ApiResponse<string>>> AddDetailedMealPlan([FromBody] DetailedMealPlanRequest request)
+    {
+        var userID = User.GetUserId();
+        
+        var response = await _detailedMealPlanService.AddDetailedMealPlan(userID, request);
+
+        return Ok(response);
+    }
 
     [HttpGet("overview")]
     public async Task<ActionResult<ApiResponse<List<DetailedCompleteOverviewDTO>>>> GetEntireDetailedMealPlan()

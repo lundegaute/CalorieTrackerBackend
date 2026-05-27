@@ -1,6 +1,8 @@
 using CalorieTracker.DTO;
+using CalorieTracker.DTO.Requests;
 using CalorieTracker.Repositories;
-
+using CalorieTracker.Models;
+using CalorieTracker.Services;
 
 
 namespace CalorieTracker.Services;
@@ -8,11 +10,33 @@ namespace CalorieTracker.Services;
 public class DetailedMealPlanService
 {
     private readonly DetailedMealPlanRepository _detailedMealPlanRepository;
+    private readonly AuthService _authService;
 
-    public DetailedMealPlanService(DetailedMealPlanRepository detailedMealPlanRepository)
+    public DetailedMealPlanService(
+        DetailedMealPlanRepository detailedMealPlanRepository,
+        AuthService authService
+        )
     {
         _detailedMealPlanRepository = detailedMealPlanRepository;
+        _authService = authService;
     }
+
+    public async Task<ApiResponse<string>> AddDetailedMealPlan(int userID, DetailedMealPlanRequest request)
+    {
+        var user = await _authService.GetUser(userID);
+
+        var newPlan = new DetailedMealPlan
+        {
+            Name = request.Name,
+            User = user
+        } ;
+        var response = await _detailedMealPlanRepository.AddDetailedMealPlan(newPlan);
+
+        var apiResponse = ApiResponse<string>.Success(response, 200);
+
+        return apiResponse;
+    }
+
 
     // Gets the entire DetailedMealPlans -> DetailedMeals -> DetailedMealcomponents -> DetailedFoods -> FoodConstituents -> Nutrients
     public async Task<ApiResponse<List<DetailedCompleteOverviewDTO>>> GetEntireDetailedMealPlan(int userID)

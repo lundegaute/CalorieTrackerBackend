@@ -25,6 +25,15 @@ namespace CalorieTracker.Services
             _context = context;
         }
 
+        public async Task<User> GetUser(int userID)
+        {
+            var user = await _context.Users.FindAsync(userID);
+            if ( user is null )
+                throw new KeyNotFoundException("User not found");
+                
+            return user;
+        }
+
         public async Task RegisterUserAsync(RegisterUserDTO user)
         {
             // Check if user already exists

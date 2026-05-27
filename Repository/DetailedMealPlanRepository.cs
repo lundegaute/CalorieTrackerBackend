@@ -14,6 +14,14 @@ public class DetailedMealPlanRepository
         _context = context;
     }
 
+    public async Task<string> AddDetailedMealPlan(DetailedMealPlan newDetailedMealPlan)
+    {
+        _context.DetailedMealPlans.Add(newDetailedMealPlan);
+        await _context.SaveChangesAsync();
+
+        return $"New mealplan added successfully";
+    }
+
     // Gets the entire MealPlans -> meals -> mealcomponents -> foods, for current user
     public async Task<List<DetailedMealPlan>> GetEntireDetailedMealPlan(int userID)
     {
