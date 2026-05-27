@@ -17,14 +17,16 @@ public static class DetailedSeed
         if ( user is null ) 
             throw new KeyNotFoundException("User database is empty. Create a user before restarting application");
 
-        var havregryn = await _context.DetailedFoods.FirstOrDefaultAsync(x => x.Id == 582);
-        var melk = await _context.DetailedFoods.FirstOrDefaultAsync(x => x.Id == 1749);
-        if ( havregryn is null ) 
+        var foodItem1 = await _context.DetailedFoods.FirstOrDefaultAsync(x => x.Id == 758);
+        var foodItem2 = await _context.DetailedFoods.FirstOrDefaultAsync(x => x.Id == 1514);
+        if ( foodItem1 is null ) 
+            throw new KeyNotFoundException("Food not found in database. Make sure to run the correct endpoint to fill DB with detailedFood data");
+        if ( foodItem2 is null ) 
             throw new KeyNotFoundException("Food not found in database. Make sure to run the correct endpoint to fill DB with detailedFood data");
 
-        var mealPlan1 = new DetailedMealPlan
+        var mealPlan2 = new DetailedMealPlan
         {
-            Name = "MealPlan#1",
+            Name = "MealPlan#2",
             UserId = user.Id,
             DetailedMeals = new List<DetailedMeal>
             {
@@ -36,12 +38,12 @@ public static class DetailedSeed
                         new DetailedMealComponent
                         {
                             Quantity = 100,
-                            DetailedFood = havregryn
+                            DetailedFood = foodItem1
                         },
                         new DetailedMealComponent
                         {
-                            Quantity = 225,
-                            DetailedFood = melk
+                            Quantity = 50,
+                            DetailedFood = foodItem2
                         }
                     }
                 },
@@ -53,19 +55,19 @@ public static class DetailedSeed
                         new DetailedMealComponent
                         {
                             Quantity = 120,
-                            DetailedFood = havregryn
+                            DetailedFood = foodItem1
                         },
                         new DetailedMealComponent
                         {
                             Quantity = 270,
-                            DetailedFood = melk
+                            DetailedFood = foodItem2
                         }
                     }
                 }
             }
         };
 
-        _context.DetailedMealPlans.Add(mealPlan1);
+        _context.DetailedMealPlans.Add(mealPlan2);
         await _context.SaveChangesAsync();
 
     }

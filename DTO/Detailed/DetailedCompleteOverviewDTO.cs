@@ -12,8 +12,12 @@ public static class MacroId
 public class DetailedCompleteOverviewDTO
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    
+    public required string Name { get; set; }
+    public double totalCalories => Math.Round( DetailedMeals.Sum(meal => meal.TotalCalories) ,1);
+    public double totalProtein => Math.Round( DetailedMeals.Sum(meal => meal.TotalProtein) ,1);
+    public double totalCarbs => Math.Round( DetailedMeals.Sum(meal => meal.TotalCarbs) ,1);
+    public double totalFats => Math.Round( DetailedMeals.Sum(meal => meal.TotalFats) ,1);
+
     public List<DetailedMealDTO> DetailedMeals { get; set; } = new();
 }
 
