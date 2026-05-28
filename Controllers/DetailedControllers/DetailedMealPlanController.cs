@@ -19,6 +19,11 @@ public class DetailedMealPlanController : ControllerBase
         _detailedMealPlanService = detailedMealPlanService;
     }
 
+    /// <summary>
+    /// Adds a single MealPlan to the current user: MealPlan#1, MealPlan#2, BulkPlan, WeightLossPlan
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost("add")]
     public async Task<ActionResult<ApiResponse<string>>> AddDetailedMealPlan([FromBody] DetailedMealPlanRequest request)
     {

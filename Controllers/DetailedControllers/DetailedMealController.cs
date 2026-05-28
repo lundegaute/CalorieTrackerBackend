@@ -19,7 +19,12 @@ public class DetailedMealController : ControllerBase
         _detailedMealService = detailedMealService;
     }
 
-    [HttpPost]
+    /// <summary>
+    /// Add a single meal to your MealPlan: Frokost, Middag, Kveldsmat
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("add")]
     public async Task<ActionResult<ApiResponse<string>>> AddDetailedMeal([FromBody] DetailedMealRequest request)
     {
         var userID = User.GetUserId();
