@@ -1,4 +1,5 @@
 using CalorieTracker.DTO;
+using CalorieTracker.DTO.Constituents;
 using CalorieTracker.DTO.Requests;
 using CalorieTracker.Repositories;
 using CalorieTracker.Models;
@@ -75,12 +76,14 @@ public class DetailedMealPlanService
                                 NutrientName = fc.Nutrient.NutrientName,
                                 DefaultUnit = fc.Nutrient.DefaultUnit,
                             },
-                            Quantity = fc.Quantity,
+                            Quantity = fc.Quantity ?? 0,
                         }).ToList(),
                     }
                 }).ToList()
             }).ToList(),
         }).ToList();
+
+        
 
         var response = ApiResponse<List<DetailedCompleteOverviewDTO>>.Success(mealPlanDTOs, 200);
 

@@ -1,4 +1,4 @@
-
+using CalorieTracker.DTO.Constituents;
 
 namespace CalorieTracker.DTO;
 
@@ -18,6 +18,20 @@ public class DetailedCompleteOverviewDTO
     public double totalCarbs => Math.Round( DetailedMeals.Sum(meal => meal.TotalCarbs) ,1);
     public double totalFats => Math.Round( DetailedMeals.Sum(meal => meal.TotalFats) ,1);
 
+    // Summary of MicroNutrients for the entire MealPlan
+    public Dictionary<string, MicroNutrientSummary> MicroSummary => DetailedMeals
+        .SelectMany(meal => meal.MicroSummary)
+        .GroupBy(micro => micro.Key)
+        .ToDictionary( 
+            group => group.Key,
+            group => new MicroNutrientSummary
+            {
+                NutrientId = group.First().Value.NutrientId,
+                NutrientName = group.First().Value.NutrientName,
+                TotalQuantity = group.Sum(x => x.Value.TotalQuantity),
+            }
+        );
+
     public List<DetailedMealDTO> DetailedMeals { get; set; } = new();
 }
 
@@ -29,6 +43,19 @@ public class DetailedMealDTO
     public double TotalProtein => Math.Round(Components.Sum(component => component.TotalProtein), 1);
     public double TotalCarbs => Math.Round(Components.Sum(component => component.TotalCarbs), 1);
     public double TotalFats => Math.Round(Components.Sum(component => component.TotalFats), 1);
+
+    // Summarizing MicroNutrients for entire meal, to easily display in charts using Object.values(Microsummery) to make a list and use in DevExtreme
+    public Dictionary<string, MicroNutrientSummary> MicroSummary => Components
+        .SelectMany(food => food.DetailedFood.Constituents)
+        .GroupBy(con => con.NutrientId)
+        .ToDictionary(
+            group => group.Key,
+            group => new MicroNutrientSummary
+            {
+                NutrientId = group.Key,
+                NutrientName = group.First().Nutrient.NutrientName,
+                TotalQuantity = Math.Round(group.Sum(n => n.Quantity ?? 0), 2),
+            });
 
     public List<DetailedMealComponentDTO> Components { get; set; } = new(); // [Havregryn, Melk]
 
