@@ -29,8 +29,17 @@ public class DetailedFoodController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<ApiResponse<string>>> GetDetailedFoodsAsync()
     {
+        
         var response = await _detailedFoodService.AddDetailedFromMatvaretabellen();
 
         return Ok(response);
+    }
+
+    [HttpPost("search")]
+    public async Task<ActionResult<ApiResponse<List<DetailedFoodDTO>>>> DetailedFoodSearch([FromBody] string search)
+    {
+        var foods = new List<DetailedFoodDTO>();
+        var apiResponse = ApiResponse<List<DetailedFoodDTO>>.Success( foods, 200); 
+        return Ok(apiResponse);
     }
 }

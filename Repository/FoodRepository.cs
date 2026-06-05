@@ -36,6 +36,7 @@ public class FoodRepository
         var foodConstituentsCounter = 0;
 
         var dbNutrients = (await _context.Nutrients.Select(n => n.NutrientId).ToListAsync()).ToHashSet();
+        var existingFoods = (await _context.DetailedFoods.ToListAsync()).Select(x => x.FoodId).ToHashSet();
         
         try
         {
@@ -43,7 +44,7 @@ public class FoodRepository
             foreach(var f in foods)
             {
                 // If food is already in DB, we skip it
-                if ( await _context.DetailedFoods.AnyAsync(df => df.FoodId == f.foodId) )
+                if ( existingFoods.Contains(f.foodId) )
                 {
                     continue;
                 }
@@ -69,6 +70,7 @@ public class FoodRepository
                 };
 
                 _context.DetailedFoods.Add(addFood);
+                await _context.SaveChangesAsync();
                 detailedFoodsCounter += 1;
                 
                 foreach(var nutrient in f.constituents)

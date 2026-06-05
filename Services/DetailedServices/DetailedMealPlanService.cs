@@ -75,6 +75,7 @@ public class DetailedMealPlanService
                                 NutrientId = fc.NutrientId,
                                 NutrientName = fc.Nutrient.NutrientName,
                                 DefaultUnit = fc.Nutrient.DefaultUnit,
+                                Category = fc.Nutrient.Category,
                             },
                             Quantity = fc.Quantity ?? 0,
                         }).ToList(),

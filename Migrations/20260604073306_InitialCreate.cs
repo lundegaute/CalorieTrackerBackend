@@ -6,7 +6,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace CalorieTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedAllDetailedModels : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,7 +59,8 @@ namespace CalorieTracker.Migrations
                 {
                     NutrientId = table.Column<string>(type: "varchar(255)", nullable: false),
                     NutrientName = table.Column<string>(type: "longtext", nullable: false),
-                    DefaultUnit = table.Column<string>(type: "longtext", nullable: true)
+                    DefaultUnit = table.Column<string>(type: "longtext", nullable: true),
+                    Category = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, defaultValue: "Other")
                 },
                 constraints: table =>
                 {
@@ -101,7 +102,7 @@ namespace CalorieTracker.Migrations
                         column: x => x.DetailedFoodId,
                         principalTable: "DetailedFoods",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FoodConstituents_Nutrients_NutrientId",
                         column: x => x.NutrientId,
@@ -160,8 +161,7 @@ namespace CalorieTracker.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false),
-                    MealPlanId = table.Column<int>(type: "int", nullable: false),
-                    DetailedMealPlanId = table.Column<int>(type: "int", nullable: true)
+                    DetailedMealPlanId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

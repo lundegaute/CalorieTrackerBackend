@@ -248,6 +248,12 @@ namespace CalorieTracker.Migrations
                     b.Property<string>("NutrientId")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("Category")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Other");
+
                     b.Property<string>("DefaultUnit")
                         .HasColumnType("longtext");
 

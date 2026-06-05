@@ -23,6 +23,7 @@ public class Nutrient
     public string NutrientId { get; set; }
     public string NutrientName { get; set; }
     public string? DefaultUnit { get; set;}
+    public string Category { get; set; } = "Other";
 }
 
 public class DbCalories

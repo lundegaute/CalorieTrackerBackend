@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CalorieTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260521150713_RefinedDetailedFoodAndFoodConstituentsModels")]
-    partial class RefinedDetailedFoodAndFoodConstituentsModels
+    [Migration("20260604073306_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -250,6 +250,12 @@ namespace CalorieTracker.Migrations
                 {
                     b.Property<string>("NutrientId")
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Category")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Other");
 
                     b.Property<string>("DefaultUnit")
                         .HasColumnType("longtext");

@@ -147,6 +147,9 @@ namespace CalorieTracker.Data
             modelBuilder.Entity<Nutrient>(entity =>
             {
                 entity.HasKey(n => n.NutrientId);
+                entity.Property(n => n.Category)
+                    .HasMaxLength(50)
+                    .HasDefaultValue("Other");
             });
 
             // User Section ---------------------------------------------

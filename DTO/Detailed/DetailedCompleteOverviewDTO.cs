@@ -28,7 +28,9 @@ public class DetailedCompleteOverviewDTO
             {
                 NutrientId = group.First().Value.NutrientId,
                 NutrientName = group.First().Value.NutrientName,
-                TotalQuantity = group.Sum(x => x.Value.TotalQuantity),
+                TotalQuantity = Math.Round(group.Sum(x => x.Value.TotalQuantity), 2),
+                Unit = group.First().Value.Unit,
+                Category = group.First().Value.Category,
             }
         );
 
@@ -46,15 +48,27 @@ public class DetailedMealDTO
 
     // Summarizing MicroNutrients for entire meal, to easily display in charts using Object.values(Microsummery) to make a list and use in DevExtreme
     public Dictionary<string, MicroNutrientSummary> MicroSummary => Components
-        .SelectMany(food => food.DetailedFood.Constituents)
+        .SelectMany(food => { 
+                var constituents = food.DetailedFood.Constituents.Select(nutrient => new
+                {
+                    NutrientId = nutrient.NutrientId,
+                    NutrientName = nutrient.Nutrient.NutrientName,
+                    Quantity = nutrient.Quantity * (food.Quantity / 100),
+                    Unit = nutrient.Nutrient.DefaultUnit,
+                    Category = nutrient.Nutrient.Category,
+                });
+                return constituents;
+            })
         .GroupBy(con => con.NutrientId)
         .ToDictionary(
             group => group.Key,
             group => new MicroNutrientSummary
             {
                 NutrientId = group.Key,
-                NutrientName = group.First().Nutrient.NutrientName,
-                TotalQuantity = Math.Round(group.Sum(n => n.Quantity ?? 0), 2),
+                NutrientName = group.First().NutrientName,
+                TotalQuantity = Math.Round(group.Sum(n => n.Quantity ?? 0), 2), // Total quantity of a nutrient ( Vitamin A, Vitamin D...)
+                Unit = group.First().Unit,
+                Category = group.First().Category,
             });
 
     public List<DetailedMealComponentDTO> Components { get; set; } = new(); // [Havregryn, Melk]
@@ -100,4 +114,5 @@ public class NutrientDTO
     public string NutrientId { get; set; }
     public string NutrientName { get; set; }
     public string? DefaultUnit { get; set;}
+    public string Category { get; set; } = "Other";
 }
