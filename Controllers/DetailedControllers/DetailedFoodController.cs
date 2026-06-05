@@ -20,6 +20,17 @@ public class DetailedFoodController : ControllerBase
         _detailedFoodService = detailedFoodService;
     }
 
+    [HttpPost("search")]
+    public async Task<ActionResult<ApiResponse<List<DetailedFoodDTO>>>> DetailedFoodSearch([FromBody] string search)
+    {
+        var apiResponse = await _detailedFoodService.DetailedFoodSearch(search);
+        
+        return Ok(apiResponse);
+    }
+
+
+
+
     /// <summary>
     /// Fills database with detailed data from matvaretabellen, returning a string with how many rows added to each table
     /// </summary>
@@ -29,17 +40,10 @@ public class DetailedFoodController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<ApiResponse<string>>> GetDetailedFoodsAsync()
     {
-        
+
         var response = await _detailedFoodService.AddDetailedFromMatvaretabellen();
 
         return Ok(response);
     }
 
-    [HttpPost("search")]
-    public async Task<ActionResult<ApiResponse<List<DetailedFoodDTO>>>> DetailedFoodSearch([FromBody] string search)
-    {
-        var foods = new List<DetailedFoodDTO>();
-        var apiResponse = ApiResponse<List<DetailedFoodDTO>>.Success( foods, 200); 
-        return Ok(apiResponse);
-    }
 }

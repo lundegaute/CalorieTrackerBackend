@@ -20,6 +20,15 @@ public class FoodRepository
         _httpClient = httpClient;
     }
 
+    public async Task<List<DetailedFood>> DetailedFoodSearch(string search)
+    {
+        var foods = await _context.DetailedFoods
+            .Include(food => food.FoodConstituents)
+            .ThenInclude(con => con.Nutrient)
+            .FirstOrDefaultAsync(food => food.Id == 582);
+        return [foods];
+    }
+
     public async Task<string> GetDetailedFoodFromMatvareTabellen()
     {
         var response = await _httpClient.GetFromJsonAsync<FoodWrapper>("https://www.matvaretabellen.no/api/nb/foods.json");
