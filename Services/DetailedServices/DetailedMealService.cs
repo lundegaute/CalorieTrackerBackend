@@ -20,6 +20,7 @@ public class DetailedMealService
 
     public async Task<ApiResponse<string>> AddDetailedMeal(int userID, DetailedMealRequest request)
     {
+        // DOUBLE CHECK ADDING A MEAL WITH A NAME THAT ALREADY EXISTS. CURRENTLY POSSIBLE TO ADD DUPLICATES, WHICH SHOULD NOT BE POSSIBLE
         if ( string.IsNullOrWhiteSpace(request.Name))
             return ApiResponse<string>.Failure(["Name can not be empty"],["Bad request"], 400);
         if ( request.DetailedMealPlanId < 1 ) 
