@@ -31,7 +31,10 @@ public class DetailedMealPlanController : ControllerBase
         
         var response = await _detailedMealPlanService.AddDetailedMealPlan(userID, request);
 
-        return Ok(response);
+        if ( response.IsSuccess )
+            return Ok(response);
+        else
+            return BadRequest(response);
     }
 
     [HttpGet("overview")]

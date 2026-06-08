@@ -26,7 +26,17 @@ public class DetailedFoodService
 
     public async Task<ApiResponse<List<DetailedFoodDTO>>> DetailedFoodSearch(string search)
     {
-        var foods = await _foodRepo.DetailedFoodSearch("havregryn");
+        // Clean up the search
+        search = search.Trim().ToLower();
+        if ( string.IsNullOrEmpty(search))
+            return ApiResponse<List<DetailedFoodDTO>>.Success([], 200);
+
+        // Split into a list of each word seperated by space [jasmin, ris]
+        var searchWords = search.Split(" ").ToList();
+
+        var foods = await _foodRepo.DetailedFoodSearch(searchWords);
+
+        // DO THIS PROPERLY: GET CORRECT DATA FROM DATABASE BASED ON SEARCH
 
         var detailedFoodDTOs = foods.Select( food => new DetailedFoodDTO
                     {

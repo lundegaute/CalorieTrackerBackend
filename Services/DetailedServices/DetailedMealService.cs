@@ -22,18 +22,17 @@ public class DetailedMealService
     {
         if ( string.IsNullOrWhiteSpace(request.Name))
             return ApiResponse<string>.Failure(["Name can not be empty"],["Bad request"], 400);
-        if ( request.DetailedMealId < 1 ) 
-            throw new ArgumentException("Invalid Meal Id");
-        
+        if ( request.DetailedMealPlanId < 1 ) 
+            throw new ArgumentException("Invalid mealPlan Id");
         // If MealPlanId does not belong to user
         var userMealPlanIds = await _detailedMealPlanRepository.GetUserDetailedMealPlanIdsAsync(userID);
-        if ( !userMealPlanIds.Contains(request.DetailedMealId) )
+        if ( !userMealPlanIds.Contains(request.DetailedMealPlanId) )
             throw new UnauthorizedAccessException("Invalid MealPlanID");
 
         var newDetailedMeal = new DetailedMeal
         {
             Name = request.Name,
-            DetailedMealPlanId = request.DetailedMealId
+            DetailedMealPlanId = request.DetailedMealPlanId
         };
 
         var response = await _detailedMealRepository.AddDetailedMeal(newDetailedMeal);

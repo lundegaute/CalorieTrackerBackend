@@ -36,16 +36,6 @@ public class DetailedMealPlanRepository
             .ToListAsync();
         
         return detailedMealPlans;
-
-    }
-
-    public async Task<List<DetailedMealPlan>> GetDetailedMealPlansAsync(int userID)
-    {
-        var mealPlans = await _context.DetailedMealPlans
-            .Where(mp => mp.UserId == userID)
-            .ToListAsync();
-
-        return mealPlans;
     }
 
     public async Task<List<int>> GetUserDetailedMealPlanIdsAsync(int userID)
@@ -56,6 +46,33 @@ public class DetailedMealPlanRepository
             .ToListAsync();
         
         return detailedMealPlanIds;
+    }
+
+    /// <summary>
+    /// If name exists in the table for this specific user, return true
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="userID"></param>
+    /// <returns></returns>
+    public async Task<bool> IsNameTaken(string name, int userID)
+    {
+        var isNameTaken = await _context.DetailedMealPlans
+            .Where(plan => plan.UserId == userID)
+            .AnyAsync(plan => plan.Name == name);
+
+        return isNameTaken;
+    }
+
+    public async Task<List<int>> GetUserMealIds(int userID)
+    {
+        var mealIds = await _context.DetailedMealPlans
+            .Include(plan => plan.DetailedMeals)
+            .Where(plan => plan.UserId == userID)
+            .SelectMany(plan => plan.DetailedMeals
+                .Select(meals => meals.Id))
+            .ToListAsync();
+        
+        return mealIds;
     }
 
 }

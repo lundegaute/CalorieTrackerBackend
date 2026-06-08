@@ -27,10 +27,14 @@ public class DetailedMealController : ControllerBase
     [HttpPost("add")]
     public async Task<ActionResult<ApiResponse<string>>> AddDetailedMeal([FromBody] DetailedMealRequest request)
     {
+        // If userID is not found, this throws an error
         var userID = User.GetUserId();
 
         var response = await _detailedMealService.AddDetailedMeal(userID, request);
 
-        return Ok(response);
+        if ( response.IsSuccess) 
+            return Ok(response);
+        else 
+            return BadRequest(response);
     }
 }

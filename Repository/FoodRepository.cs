@@ -20,13 +20,27 @@ public class FoodRepository
         _httpClient = httpClient;
     }
 
-    public async Task<List<DetailedFood>> DetailedFoodSearch(string search)
+     public async Task<DetailedFood?> GetDetailedFoodById(int foodId)
     {
-        var foods = await _context.DetailedFoods
+        var food = await _context.DetailedFoods.FindAsync(foodId);
+
+        return food;
+    }
+
+    public async Task<List<DetailedFood>> DetailedFoodSearch(List<string> searchWords)
+    {
+        IQueryable<DetailedFood> query = _context.DetailedFoods
             .Include(food => food.FoodConstituents)
-            .ThenInclude(con => con.Nutrient)
-            .FirstOrDefaultAsync(food => food.Id == 582);
-        return [foods];
+            .ThenInclude(con => con.Nutrient);
+
+        foreach(var word in searchWords)
+        {
+            query = query.Where(food => food.FoodName.Contains(word));
+        }
+
+        var foodsFromSearch = await query.ToListAsync();
+        
+        return foodsFromSearch;
     }
 
     public async Task<string> GetDetailedFoodFromMatvareTabellen()
