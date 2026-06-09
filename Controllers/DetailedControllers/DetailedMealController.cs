@@ -37,4 +37,16 @@ public class DetailedMealController : ControllerBase
         else 
             return BadRequest(response);
     }
+
+    [HttpDelete("delete/{mealID}")]
+    public async Task<ActionResult<ApiResponse<string>>> DeleteMeal([FromRoute] int mealID)
+    {
+        var userID = User.GetUserId();
+        var response = await _detailedMealService.DeleteMeal(userID, mealID);
+
+        if ( response.IsSuccess )
+            return Ok(response);
+        else 
+            return BadRequest(response);
+    }
 }

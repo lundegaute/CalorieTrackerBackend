@@ -81,6 +81,7 @@ namespace CalorieTracker.Data
                 // Deleting mealplan will delete related meals and mealComponents but not detailedFood
                 entity.HasMany(plan => plan.DetailedMeals)
                     .WithOne()
+                    .HasForeignKey(meal => meal.DetailedMealPlanId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(plan => plan.User)
@@ -96,6 +97,7 @@ namespace CalorieTracker.Data
                 // If a meal is deleted, the related meal components will also be deleted
                 entity.HasMany(dm => dm.Components)
                     .WithOne()
+                    .HasForeignKey(com => com.DetailedMealId)
                     .OnDelete(DeleteBehavior.Cascade);
 
             });

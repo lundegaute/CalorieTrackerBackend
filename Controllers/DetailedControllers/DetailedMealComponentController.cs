@@ -19,7 +19,11 @@ public class DetailedMealComponentController : ControllerBase
         _detailedMealComponentService = detailedMealComponentService;
     }
 
-
+    /// <summary>
+    /// Adds a single new foodItem from detailedFoods to the currently selected meal
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost("add")]
     public async Task<ActionResult<ApiResponse<string>>> AddMealComponent([FromBody] DetailedMealComponentRequest request)
     {
@@ -33,4 +37,15 @@ public class DetailedMealComponentController : ControllerBase
         
     }
     
+    [HttpDelete("delete/{mealComponentID}")]
+    public async Task<ActionResult<ApiResponse<string>>> DeleteDetailedMealComponent([FromRoute] int mealComponentID)
+    {
+        var userID = User.GetUserId();
+        var response = await _detailedMealComponentService.DeleteMealComponent(userID, mealComponentID);
+
+        if ( response.IsSuccess )
+            return Ok(response);
+        else
+            return BadRequest(response);
+    }
 }

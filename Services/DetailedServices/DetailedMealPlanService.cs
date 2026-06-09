@@ -97,5 +97,17 @@ public class DetailedMealPlanService
         return response;
     }
 
+    public async Task<ApiResponse<string>> DeleteMealPlanById(int userID, int mealPlanID)
+    {
+        if ( int.IsNegative(mealPlanID))
+            throw new ArgumentException($"{nameof(mealPlanID)} can not be a negative number");
+        var userMealPlan = await _detailedMealPlanRepository.GetUserMealPlan(userID, mealPlanID);
+        if ( userMealPlan is null ) 
+            throw new KeyNotFoundException($"MealPlan not found");
+
+
+        var response = await _detailedMealPlanRepository.DeleteMealPlanById(userMealPlan);
+        return ApiResponse<string>.Success(response, 200);
+    }
 
 }

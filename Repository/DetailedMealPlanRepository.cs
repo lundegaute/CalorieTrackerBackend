@@ -22,7 +22,11 @@ public class DetailedMealPlanRepository
         return $"New mealplan added successfully";
     }
 
-    // Gets the entire MealPlans -> meals -> mealcomponents -> foods, for current user
+    /// <summary> 
+    /// Gets the entire MealPlans -> meals -> mealcomponents -> foods, for current user
+    /// </summary>
+    /// <param name="userID"></param>
+    /// <returns></returns>
     public async Task<List<DetailedMealPlan>> GetEntireDetailedMealPlan(int userID)
     {
         var detailedMealPlans = await _context.DetailedMealPlans
@@ -38,6 +42,27 @@ public class DetailedMealPlanRepository
         return detailedMealPlans;
     }
 
+    /// <summary>
+    /// Returns a detailedMealPlan for the logged i user
+    /// </summary>
+    /// <param name="userID"></param>
+    /// <param name="mealPlanID"></param>
+    /// <returns></returns>
+    public async Task<DetailedMealPlan?> GetUserMealPlan(int userID, int mealPlanID)
+    {
+        var mealPlan = await _context.DetailedMealPlans
+            .Where(plan => plan.UserId == userID)
+            .FirstOrDefaultAsync(plan => plan.Id == mealPlanID);
+        
+        return mealPlan;
+    }
+
+
+    /// <summary>
+    /// Returns a list of the mealplanIDs belonging to the logged in user
+    /// </summary>
+    /// <param name="userID"></param>
+    /// <returns></returns>
     public async Task<List<int>> GetUserDetailedMealPlanIdsAsync(int userID)
     {
         var detailedMealPlanIds = await _context.DetailedMealPlans
@@ -46,6 +71,19 @@ public class DetailedMealPlanRepository
             .ToListAsync();
         
         return detailedMealPlanIds;
+    }
+
+    public async Task<DetailedMealComponent?> GetUserMealComponent(int userID, int mealComponentID)
+    {
+        var mealComponent = await _context.DetailedMealPlans
+            .Include(plan => plan.DetailedMeals)
+                .ThenInclude(meal => meal.Components)
+            .Where(plan => plan.UserId == userID)
+            .SelectMany(plan => plan.DetailedMeals)
+                .SelectMany(meal => meal.Components)
+                    .FirstOrDefaultAsync(comp => comp.Id == mealComponentID);
+
+        return mealComponent;
     }
 
     /// <summary>
@@ -63,6 +101,27 @@ public class DetailedMealPlanRepository
         return isNameTaken;
     }
 
+    /// <summary>
+    /// Returns a detailedMeal belonging to the logged in user
+    /// </summary>
+    /// <param name="mealID"></param>
+    /// <param name="userID"></param>
+    /// <returns></returns>
+    public async Task<DetailedMeal?> GetDetailedMealById(int mealID, int userID)
+    {
+        var meal = await _context.DetailedMealPlans
+            .Where(plan => plan.UserId == userID)
+            .SelectMany(plan => plan.DetailedMeals)
+                .FirstOrDefaultAsync(meal => meal.Id == mealID);
+        
+        return meal;
+    }
+
+    /// <summary>
+    /// Returns a list of the users mealIDs. Usefull to check if mealId from requests belong to current user
+    /// </summary>
+    /// <param name="userID"></param>
+    /// <returns></returns>
     public async Task<List<int>> GetUserMealIds(int userID)
     {
         var mealIds = await _context.DetailedMealPlans
@@ -74,5 +133,29 @@ public class DetailedMealPlanRepository
         
         return mealIds;
     }
+
+    /// <summary>
+    /// Returns a list of meal names for the logged in user
+    /// </summary>
+    /// <param name="userID"></param>
+    /// <returns></returns>
+    public async Task<List<string>> GetUserMealNames(int userID)
+    {
+        var mealNames = await _context.DetailedMealPlans
+            .Include(plan => plan.DetailedMeals)
+            .Where(plan => plan.UserId == userID)
+            .SelectMany(plan => plan.DetailedMeals)
+                .Select(meal => meal.Name)
+            .ToListAsync();
+        
+        return mealNames;
+    }
+
+    public async Task<string> DeleteMealPlanById(DetailedMealPlan detailedMealPlan)
+    {
+        _context.DetailedMealPlans.Remove(detailedMealPlan);
+        await _context.SaveChangesAsync();
+        return "Delete Successful";
+    } 
 
 }

@@ -23,4 +23,11 @@ public class DetailedMealComponentRepository
         return "Meal Added";
     }
 
+    public async Task<string> DeleteMealComponent(DetailedMealComponent detailedMealComponent)
+    {
+        _context.Remove(detailedMealComponent);
+        await _context.SaveChangesAsync();
+        return "Delete Successfull";
+    }
+
 }

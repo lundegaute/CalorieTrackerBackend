@@ -45,9 +45,20 @@ public class DetailedMealPlanController : ControllerBase
         var response = await _detailedMealPlanService.GetEntireDetailedMealPlan(userID);
 
         return Ok(response);
-
     }
 
+    [HttpDelete("delete/{mealPlanID}")]
+    public async Task<ActionResult<ApiResponse<string>>> DeleteMealPlan([FromRoute] int mealPlanID)
+    {
+        var userID = User.GetUserId();
+
+        var response = await _detailedMealPlanService.DeleteMealPlanById(userID, mealPlanID);
+
+        if ( response.IsSuccess)
+            return Ok(response);
+        else
+            return BadRequest(response);
+    }
     
     
 }
