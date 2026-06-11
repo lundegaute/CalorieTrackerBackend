@@ -25,7 +25,7 @@ public class DetailedMealPlanController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost("add")]
-    public async Task<ActionResult<ApiResponse<string>>> AddDetailedMealPlan([FromBody] DetailedMealPlanRequest request)
+    public async Task<ActionResult<ApiResponse<int>>> AddDetailedMealPlan([FromBody] DetailedMealPlanRequest request)
     {
         var userID = User.GetUserId();
         

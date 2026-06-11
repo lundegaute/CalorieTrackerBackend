@@ -34,7 +34,7 @@ public class DetailedMealService
             throw new UnauthorizedAccessException("Invalid MealPlanID");
 
         // Checking for duplicate names
-        var userMealNames = await _detailedMealPlanRepository.GetUserMealNames(userID);
+        var userMealNames = await _detailedMealPlanRepository.GetUserMealNames(userID, request.DetailedMealPlanId);
         if ( userMealNames.Contains(request.Name))
             return ApiResponse<string>.Failure([$"The name {request.Name}, already exists in this meal plan"], ["Duplicate Error"], 400);
 

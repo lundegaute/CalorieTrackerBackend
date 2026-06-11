@@ -14,12 +14,12 @@ public class DetailedMealPlanRepository
         _context = context;
     }
 
-    public async Task<string> AddDetailedMealPlan(DetailedMealPlan newDetailedMealPlan)
+    public async Task<int> AddDetailedMealPlan(DetailedMealPlan newDetailedMealPlan)
     {
         _context.DetailedMealPlans.Add(newDetailedMealPlan);
         await _context.SaveChangesAsync();
 
-        return $"New mealplan added successfully";
+        return newDetailedMealPlan.Id;
     }
 
     /// <summary> 
@@ -139,11 +139,12 @@ public class DetailedMealPlanRepository
     /// </summary>
     /// <param name="userID"></param>
     /// <returns></returns>
-    public async Task<List<string>> GetUserMealNames(int userID)
+    public async Task<List<string>> GetUserMealNames(int userID, int mealPlanID)
     {
         var mealNames = await _context.DetailedMealPlans
             .Include(plan => plan.DetailedMeals)
-            .Where(plan => plan.UserId == userID)
+            .Where(plan => plan.UserId == userID && 
+                plan.Id == mealPlanID)
             .SelectMany(plan => plan.DetailedMeals)
                 .Select(meal => meal.Name)
             .ToListAsync();

@@ -22,14 +22,28 @@ public class DetailedMealPlanService
         _authService = authService;
     }
 
-    public async Task<ApiResponse<string>> AddDetailedMealPlan(int userID, DetailedMealPlanRequest request)
+    public async Task<ApiResponse<int>> AddDetailedMealPlan(int userID, DetailedMealPlanRequest request)
     {
         var user = await _authService.GetUser(userID);
         if ( string.IsNullOrWhiteSpace(request.Name) )
-            return ApiResponse<string>.Failure(["Mealplan name can not be empty"], ["User error"], 400);
+            return new ApiResponse<int>
+            {
+                IsSuccess = false,
+                Data = 0,
+                Errors = ["Mealplan name can not be empty"],
+                Types = ["User error"],
+                StatusCode = 400
+            };
         // Test if the request name already exists for the current user
         if ( await _detailedMealPlanRepository.IsNameTaken(request.Name, user.Id))
-            return ApiResponse<string>.Failure(["Mealplan name already exists"], ["User error"], 400);
+            return new ApiResponse<int>
+            {
+                IsSuccess = false,
+                Data = 0,
+                Errors = ["Mealplan name already exists"],
+                Types = ["User error"],
+                StatusCode = 400
+            };
 
 
         var newPlan = new DetailedMealPlan
@@ -39,7 +53,7 @@ public class DetailedMealPlanService
         };
         var response = await _detailedMealPlanRepository.AddDetailedMealPlan(newPlan);
 
-        var apiResponse = ApiResponse<string>.Success(response, 200);
+        var apiResponse = ApiResponse<int>.Success(response, 200);
 
         return apiResponse;
     }
