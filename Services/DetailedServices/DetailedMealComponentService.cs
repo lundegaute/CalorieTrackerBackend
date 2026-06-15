@@ -28,36 +28,41 @@ public class DetailedMealComponentService
     }
 
     
-    public async Task<ApiResponse<string>> AddMealComponent(int userID, DetailedMealComponentRequest request)
+    public async Task<ApiResponse<string>> AddMealComponent(int userID, List<DetailedMealComponentRequest> request)
     {  
-        if ( int.IsNegative(request.DetailedMealId) )
-            throw new ArgumentException($"{nameof(request.DetailedMealId)} can not be a negative number"); 
-        if ( int.IsNegative(request.DetailedFoodId) )
-            throw new ArgumentException($"{nameof(request.DetailedFoodId)} can not be a negative number"); 
-        if ( double.IsNaN(request.Quantity))
-            throw new ArgumentException($"{nameof(request.Quantity)} must be a number");
-        if ( double.IsNegative(request.Quantity) )
-            throw new ArgumentException($"{nameof(request.Quantity)} must be a positive number");
+        if ( request.Any(item => int.IsNegative(item.DetailedMealId)) )
+            throw new ArgumentException($"Detailed Meal ID can not be a negative number"); 
+        if ( request.Any( item => int.IsNegative(item.DetailedFoodId)) )
+            throw new ArgumentException($"Detailed Food ID can not be a negative number"); 
+        if ( request.Any( item => double.IsNaN(item.Quantity)) )
+            throw new ArgumentException($"quantity must be a number");
+        if ( request.Any( item => double.IsNegative( item.Quantity)) )
+            throw new ArgumentException($"Quantity must be a positive number");
 
         // Check if detailedMealId belongs to user
         var detailedMealIds = await _detailedMealPlanRepository.GetUserMealIds(userID);
-        if ( !detailedMealIds.Contains(request.DetailedMealId))
+        if ( request.Any( item => !detailedMealIds.Contains(item.DetailedMealId)) )
             throw new UnauthorizedAccessException("MealId does not belong to user");
 
         // Validate detailedFood
-        var detailedFood = await _foodRepository.GetDetailedFoodById(request.DetailedFoodId);
-        if ( detailedFood is null ) 
-            throw new KeyNotFoundException($"FoodItem not found with ID: {request.DetailedFoodId}");
+        var uniqueFoodIds = request.Select(item => item.DetailedFoodId).Distinct().ToList();
+        var detailedFoods = await _foodRepository.GetMultipleDetailedFoodById( uniqueFoodIds );
+        if ( detailedFoods.Count != uniqueFoodIds.Count )
+            throw new KeyNotFoundException("One or more food items were not found");
+        
+        var detailedFoodDict = detailedFoods.ToDictionary(
+            item => item.Id,
+            item => item
+        );
 
-
-        var newFoodComponent = new DetailedMealComponent
+        var newFoodComponents = request.Select( item => new DetailedMealComponent
         {
-            DetailedMealId = request.DetailedMealId,
-            Quantity = request.Quantity,
-            DetailedFood = detailedFood
-        };
+            DetailedMealId = item.DetailedMealId,
+            Quantity = item.Quantity,
+            DetailedFood = detailedFoodDict[item.DetailedFoodId],
+        }).ToList();
 
-        var response = await _detailedMealComponentRepository.AddMealComponent(newFoodComponent);
+        var response = await _detailedMealComponentRepository.AddMealComponents(newFoodComponents);
         var apiResponse = ApiResponse<string>.Success(response, 200);
         return apiResponse;
     }

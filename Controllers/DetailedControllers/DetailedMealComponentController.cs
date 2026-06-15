@@ -20,12 +20,12 @@ public class DetailedMealComponentController : ControllerBase
     }
 
     /// <summary>
-    /// Adds a single new foodItem from detailedFoods to the currently selected meal
+    /// Adds a list of new foodItems from detailedFoods to the currently selected meal
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost("add")]
-    public async Task<ActionResult<ApiResponse<string>>> AddMealComponent([FromBody] DetailedMealComponentRequest request)
+    public async Task<ActionResult<ApiResponse<string>>> AddMealComponents([FromBody] List<DetailedMealComponentRequest> request)
     {
         var userID = User.GetUserId();
         var response = await _detailedMealComponentService.AddMealComponent(userID, request);

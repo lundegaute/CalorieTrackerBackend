@@ -15,9 +15,9 @@ public class DetailedMealComponentRepository
         _context = context;
     }
 
-    public async Task<string> AddMealComponent(DetailedMealComponent newMealComponent)
+    public async Task<string> AddMealComponents(List<DetailedMealComponent> newMealComponents)
     {
-        _context.DetailedMealComponents.Add(newMealComponent);
+        _context.DetailedMealComponents.AddRange(newMealComponents);
         await _context.SaveChangesAsync();
 
         return "Meal Added";

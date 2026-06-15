@@ -26,6 +26,14 @@ public class FoodRepository
 
         return food;
     }
+    public async Task<List<DetailedFood>> GetMultipleDetailedFoodById(List<int> foodIds)
+    {
+        var foods = await _context.DetailedFoods
+            .Where(food => foodIds.Contains(food.Id) )
+            .ToListAsync();
+
+        return foods;
+    }
 
     public async Task<List<DetailedFood>> DetailedFoodSearch(List<string> searchWords)
     {
