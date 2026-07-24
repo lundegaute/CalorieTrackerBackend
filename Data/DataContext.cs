@@ -22,7 +22,7 @@ namespace CalorieTracker.Data
         public DbSet<Nutrient> Nutrients { get; set; }
         public DbSet<FoodConstituent> FoodConstituents { get; set; }
 
-
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

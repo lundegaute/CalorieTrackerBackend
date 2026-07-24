@@ -9,8 +9,7 @@ public class DetailedFoodService
 {
     private readonly FoodRepository _foodRepo;
 
-    public DetailedFoodService(
-        FoodRepository foodRepo )
+    public DetailedFoodService( FoodRepository foodRepo )
     {
         _foodRepo = foodRepo;
     }
