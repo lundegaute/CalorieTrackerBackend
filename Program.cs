@@ -130,6 +130,7 @@ builder.Services.AddCors(options =>
         {
             builder.WithOrigins(
                 "http://localhost:3000", // React frontend URL for development
+                "http://localhost:3001", // React frontend URL for development
                 "https://calorietracker-gfh9c0bwgvc9fjaq.norwayeast-01.azurewebsites.net" // Azure App Service URL
                 )
                 .AllowAnyHeader()

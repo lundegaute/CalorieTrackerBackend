@@ -73,6 +73,12 @@ public class DetailedMealPlanRepository
         return detailedMealPlanIds;
     }
 
+    /// <summary>
+    /// Used to find the specific DetailedMealComponent belonging to the user. 
+    /// </summary>
+    /// <param name="userID"></param>
+    /// <param name="mealComponentID"></param>
+    /// <returns>A single DetailedMealComponent</returns>
     public async Task<DetailedMealComponent?> GetUserMealComponent(int userID, int mealComponentID)
     {
         var mealComponent = await _context.DetailedMealPlans

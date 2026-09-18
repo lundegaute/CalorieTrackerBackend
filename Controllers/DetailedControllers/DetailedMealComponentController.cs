@@ -36,6 +36,19 @@ public class DetailedMealComponentController : ControllerBase
             return BadRequest(response);
         
     }
+
+    [HttpPut("update")]
+    public async Task<ActionResult<ApiResponse<string>>> UpdateMealComponentQuantity([FromBody] UpdateDetailedMealComponentRequest request)
+    {
+        var userID = User.GetUserId();
+        var response = await _detailedMealComponentService.UpdateQuantity(request, userID);
+
+        if (response.IsSuccess)
+            return Ok(response);
+        else
+            return BadRequest(response);
+
+    }
     
     [HttpDelete("delete/{mealComponentID}")]
     public async Task<ActionResult<ApiResponse<string>>> DeleteDetailedMealComponent([FromRoute] int mealComponentID)

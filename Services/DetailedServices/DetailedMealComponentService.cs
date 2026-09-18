@@ -3,6 +3,7 @@ using CalorieTracker.DTO;
 using CalorieTracker.DTO.Requests;
 using CalorieTracker.Models;
 using CalorieTracker.Repositories;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 
 namespace CalorieTracker.Services;
@@ -65,6 +66,26 @@ public class DetailedMealComponentService
         var response = await _detailedMealComponentRepository.AddMealComponents(newFoodComponents);
         var apiResponse = ApiResponse<string>.Success(response, 200);
         return apiResponse;
+    }
+
+    public async Task<ApiResponse<string>> UpdateQuantity(UpdateDetailedMealComponentRequest req, int userID)
+    {
+        if (int.IsNegative(req.DetailedMealId))
+            throw new ArgumentException($"Detailed Meal ID can not be a negative number");
+        if (double.IsNaN(req.Quantity))
+            throw new ArgumentException($"quantity must be a number");
+        if (double.IsNegative(req.Quantity))
+            throw new ArgumentException($"Quantity must be a positive number");
+
+        // Find the correct component belonging to the user
+        var foodComponent = await _detailedMealPlanRepository.GetUserMealComponent(userID, req.DetailedMealComponentId);
+        if (foodComponent is null)
+            return ApiResponse<string>.Failure([$"Meal component ID: {req.DetailedMealComponentId} incorrect"], ["Not found"], 404);
+
+
+        await _detailedMealComponentRepository.UpdateComponentQuantity(req.Quantity, req.DetailedMealComponentId);
+
+        return ApiResponse<string>.Success("Quantity updated", 200);
     }
 
     public async Task<ApiResponse<string>> DeleteMealComponent( int userID, int mealComponentID)
