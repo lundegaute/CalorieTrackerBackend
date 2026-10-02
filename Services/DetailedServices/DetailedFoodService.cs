@@ -3,6 +3,7 @@ using CalorieTracker.DTO;
 using CalorieTracker.Repositories;
 using CalorieTracker.DTO.Requests;
 using CalorieTracker.Models;
+using CalorieTracker.DTO.Requests.DetailedRequests;
 
 namespace CalorieTracker.Services;
 public class DetailedFoodService
@@ -14,13 +15,44 @@ public class DetailedFoodService
         _foodRepo = foodRepo;
     }
 
-
     public async Task<ApiResponse<string>> AddDetailedFromMatvaretabellen()
     {
         var result = await _foodRepo.GetDetailedFoodFromMatvareTabellen();
 
-
         return ApiResponse<string>.Success(result, 200);
+    }
+
+    public async Task<ApiResponse<string>> AddCustomFoodToDetailedFood(AddCustomFoodToDetailedFoodsRequest req)
+    {
+        var newDetailedFood = new DetailedFood
+        {
+            FoodName = req.FoodName,
+            Calories = new DbCalories
+            {
+                Quantity = req.Calories.Quantity,
+                Unit = "kcal"
+            },
+            FoodConstituents = req.Constituents.Select(x => new FoodConstituent
+            {
+                NutrientId = x.NutrientId,
+                Quantity = x.Quantity,
+            }).ToList()
+        };
+
+        var isNameTaken = await _foodRepo.IsFoodNameTaken(newDetailedFood.FoodName);
+        if (isNameTaken)
+            return ApiResponse<string>.Failure([$"Food name: {newDetailedFood.FoodName}, is already taken"], ["Duplicate error"], 400);
+
+        try
+        {
+            await _foodRepo.AddCustomFoodToDetailedFood(newDetailedFood);
+            return ApiResponse<string>.Success("Custom food added", 200);
+        } catch (Exception ex)
+        {
+            return ApiResponse<string>.Failure([ex.Message], ["AddCustomFoodError"], 500); 
+        }
+
+
     }
 
     public async Task<ApiResponse<List<DetailedFoodDTO>>> DetailedFoodSearch(string search)

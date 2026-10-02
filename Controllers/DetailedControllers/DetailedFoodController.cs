@@ -4,6 +4,7 @@ using CalorieTracker.DTO;
 using CalorieTracker.DTO.Requests;
 using CalorieTracker.Models;
 using CalorieTracker.Services;
+using CalorieTracker.DTO.Requests.DetailedRequests;
 
 namespace CalorieTracker.Controllers;
 
@@ -44,6 +45,16 @@ public class DetailedFoodController : ControllerBase
         var response = await _detailedFoodService.AddDetailedFromMatvaretabellen();
 
         return Ok(response);
+    }
+
+    [HttpPost("add")]
+    public async Task<ActionResult<ApiResponse<string>>> AddCustomFoodToDetailedFoods([FromBody] AddCustomFoodToDetailedFoodsRequest req)
+    {
+        var res = await _detailedFoodService.AddCustomFoodToDetailedFood(req);
+        if (res.IsSuccess)
+            return Ok(res);
+        else
+            return BadRequest(res);
     }
 
 }

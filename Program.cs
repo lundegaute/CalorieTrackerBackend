@@ -1,17 +1,17 @@
-using Microsoft.OpenApi.Models;
+using Books.DataContext;
+using CalorieTracker.Configuration;
+using CalorieTracker.Data;
+using CalorieTracker.Middleware;
+using CalorieTracker.Seed;
+using CalorieTracker.SwaggerExamples;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text;
-using Swashbuckle.AspNetCore.Filters;
-using CalorieTracker.Configuration;
-using CalorieTracker.Middleware;
-using CalorieTracker.Data;
-using CalorieTracker.Seed;
-
-using CalorieTracker.SwaggerExamples;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +20,14 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString =
     builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING") ??
     builder.Configuration.GetConnectionString("CalorieTrackerConnection") ??
-    throw new InvalidOperationException("No Connection string found.");
+    throw new InvalidOperationException("CalorieTracker Connection string found.");
 builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
+
+var booksConnectionString =
+    builder.Configuration.GetConnectionString("BookTrackerConnection") ??
+    throw new InvalidOperationException("BookTracker connection string not found");
+builder.Services.AddDbContext<BooksDataContext>(options => options.UseMySQL(booksConnectionString));
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

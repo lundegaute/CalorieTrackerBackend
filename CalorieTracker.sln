@@ -4,6 +4,10 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalorieTracker", "CalorieTracker.csproj", "{52F6BEAF-2312-D6C0-12FF-88D5DA0B4857}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Books", "..\Books\Books.csproj", "{CAB84F03-C2D4-417E-9D0E-E09B97F3E4E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "..\Shared\Shared.csproj", "{2C84E91D-E7F8-4D6C-A063-78C0414AF276}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +18,14 @@ Global
 		{52F6BEAF-2312-D6C0-12FF-88D5DA0B4857}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52F6BEAF-2312-D6C0-12FF-88D5DA0B4857}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52F6BEAF-2312-D6C0-12FF-88D5DA0B4857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAB84F03-C2D4-417E-9D0E-E09B97F3E4E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAB84F03-C2D4-417E-9D0E-E09B97F3E4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAB84F03-C2D4-417E-9D0E-E09B97F3E4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAB84F03-C2D4-417E-9D0E-E09B97F3E4E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C84E91D-E7F8-4D6C-A063-78C0414AF276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C84E91D-E7F8-4D6C-A063-78C0414AF276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C84E91D-E7F8-4D6C-A063-78C0414AF276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C84E91D-E7F8-4D6C-A063-78C0414AF276}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

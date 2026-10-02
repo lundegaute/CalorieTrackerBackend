@@ -117,6 +117,12 @@ namespace CalorieTracker.Data
             modelBuilder.Entity<DetailedFood>(entity =>
             {
                 entity.HasKey(df => df.Id);
+
+                entity.Property(df => df.FoodGroupId)
+                    .IsRequired(false);
+                entity.Property(df => df.FoodId)
+                    .IsRequired(false);
+
                 entity.HasIndex(df => df.FoodId).IsUnique();
                 entity.HasIndex(df => df.FoodName).IsUnique();
 

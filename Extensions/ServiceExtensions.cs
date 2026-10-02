@@ -1,10 +1,11 @@
 using CalorieTracker.Services;
-
+using Books.Services;
 
 public static class ServiceExtensions
 {
     public static IServiceCollection AddMyServiceExtensions (this IServiceCollection services)
     {
+        // Simple Section
         services.AddScoped<AuthService>();
         services.AddScoped<MealNameService>();
         services.AddScoped<FoodSqlService>();
@@ -16,6 +17,9 @@ public static class ServiceExtensions
         services.AddScoped<DetailedFoodService>();
         services.AddScoped<DetailedMealService>();
         services.AddScoped<DetailedMealComponentService>();
+
+        // Books Section
+        services.AddScoped<BookService>();
 
 
         return services;

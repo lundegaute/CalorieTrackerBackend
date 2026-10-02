@@ -6,15 +6,14 @@ namespace CalorieTracker.Models;
 public class DetailedFood
 {
     public int Id { get; set; }
-    public string FoodId { get; set;}
-    public string FoodName { get; set;}
-    public string FoodGroupId { get; set;}
+    public string? FoodId { get; set;}
+    public required string FoodName { get; set;}
+    public string? FoodGroupId { get; set;}
     
     public DbCalories? Calories { get; set;}
     public DbEnergy? Energy { get; set; }
-
-    public List<string> SearchKeywords { get; set; }
-    public List<FoodConstituent> FoodConstituents { get; set; }
+    public List<string> SearchKeywords { get; set; } = [];
+    public List<FoodConstituent> FoodConstituents { get; set; } = [];
 
 }
 

@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using CalorieTracker.Data;
 using CalorieTracker.DTO.Requests;
 using CalorieTracker.Models;
+using CalorieTracker.DTO;
 
 namespace CalorieTracker.Repositories;
 public class FoodRepository
@@ -35,6 +36,12 @@ public class FoodRepository
         return foods;
     }
 
+    public async Task<bool> IsFoodNameTaken(string foodName)
+    {
+        var isTaken = await _context.DetailedFoods.AnyAsync(x => x.FoodName == foodName);
+        return isTaken;
+    }
+
     public async Task<List<DetailedFood>> DetailedFoodSearch(List<string> searchWords)
     {
         IQueryable<DetailedFood> query = _context.DetailedFoods
@@ -49,6 +56,12 @@ public class FoodRepository
         var foodsFromSearch = await query.ToListAsync();
         
         return foodsFromSearch;
+    }
+
+    public async Task AddCustomFoodToDetailedFood(DetailedFood customFood)
+    {
+        _context.DetailedFoods.Add(customFood);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<string> GetDetailedFoodFromMatvareTabellen()
