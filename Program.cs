@@ -1,4 +1,6 @@
+#if HAS_BOOKS
 using Books.DataContext;
+#endif
 using CalorieTracker.Configuration;
 using CalorieTracker.Data;
 using CalorieTracker.Middleware;
@@ -20,14 +22,15 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString =
     builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING") ??
     builder.Configuration.GetConnectionString("CalorieTrackerConnection") ??
-    throw new InvalidOperationException("CalorieTracker Connection string found.");
+    throw new InvalidOperationException("CalorieTracker Connection string not found.");
 builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
 
+#if HAS_BOOKS
 var booksConnectionString =
     builder.Configuration.GetConnectionString("BookTrackerConnection") ??
     throw new InvalidOperationException("BookTracker connection string not found");
 builder.Services.AddDbContext<BooksDataContext>(options => options.UseMySQL(booksConnectionString));
-
+#endif
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -154,7 +157,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         context.Database.Migrate();
-        await DetailedSeed.SeedDevelopmentData(context);
+        //await DetailedSeed.SeedDevelopmentData(context);
 
     }
     catch (Exception ex)

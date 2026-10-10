@@ -1,4 +1,5 @@
-﻿using Books.Services;
+﻿#if HAS_BOOKS
+using Books.Services;
 using Shared.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,3 +53,5 @@ public class BookController : ControllerBase
 
 
 }
+
+#endif

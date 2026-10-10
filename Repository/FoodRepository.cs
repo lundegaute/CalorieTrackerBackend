@@ -1,10 +1,11 @@
 
+using CalorieTracker.Data;
+using CalorieTracker.DTO;
+using CalorieTracker.DTO.Requests;
+using CalorieTracker.Helper.MatvaretabellenImport;
+using CalorieTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
-using CalorieTracker.Data;
-using CalorieTracker.DTO.Requests;
-using CalorieTracker.Models;
-using CalorieTracker.DTO;
 
 namespace CalorieTracker.Repositories;
 public class FoodRepository
@@ -80,7 +81,7 @@ public class FoodRepository
         var foodConstituentsCounter = 0;
 
         var dbNutrients = (await _context.Nutrients.Select(n => n.NutrientId).ToListAsync()).ToHashSet();
-        var existingFoods = (await _context.DetailedFoods.ToListAsync()).Select(x => x.FoodId).ToHashSet();
+        var existingFoods = (await _context.DetailedFoods.Select(x => x.FoodId).ToListAsync()).ToHashSet();
         
         try
         {
@@ -114,20 +115,22 @@ public class FoodRepository
                 };
 
                 _context.DetailedFoods.Add(addFood);
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync(); // Can i remove this, to make this method faster?
                 detailedFoodsCounter += 1;
                 
                 foreach(var nutrient in f.constituents)
                 {
+                    // This block adds the Nutrient to the DB
                     if ( !dbNutrients.Contains(nutrient.nutrientId))
                     {
                         nutDict.TryGetValue(nutrient.nutrientId, out var nutData);
-                        
+
                         var newNutrient = new Nutrient
                         {
                             NutrientId = nutrient.nutrientId,
                             NutrientName = nutData?.name ?? nutrient.nutrientId,
                             DefaultUnit = nutData?.unit ?? nutrient.unit,
+                            Category = GetNutrientCategory.GetCategory(nutrient.nutrientId).ToString(),
                         };
 
                         _context.Nutrients.Add(newNutrient);
@@ -142,8 +145,12 @@ public class FoodRepository
                         NutrientId = nutrient.nutrientId,
                         Quantity = nutrient.quantity ?? null,
                     };
-
-                    _context.FoodConstituents.Add(newFoodConstituent);
+                    addFood.FoodConstituents.Add(new FoodConstituent
+                    {
+                        NutrientId = nutrient.nutrientId,
+                        Quantity = nutrient.quantity,
+                    });
+                    
                     foodConstituentsCounter += 1;
                 }
             }

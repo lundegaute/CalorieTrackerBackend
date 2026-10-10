@@ -23,9 +23,20 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Books\Books.csproj" />
-    <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
+	<PropertyGroup Condition="Exists('..\Books\Books.csproj')">
+		<DefineConstants>$(DefineConstants);HAS_BOOKS</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="Exists('..\Shared\Shared.csproj')">
+		<DefineConstants>$(DefineConstants);HAS_SHARED</DefineConstants>
+	</PropertyGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\Books\Books.csproj" Condition="Exists('..\Books\Books.csproj')" />
+		<ProjectReference Include="..\Shared\Shared.csproj" Condition="Exists('..\Shared\Shared.csproj')" />
+	</ItemGroup>
+
+	<ItemGroup Condition="!Exists('..\Books\Books.csproj')">
+		<Compile Remove="Controllers\BookControllers\**" />
+	</ItemGroup>
+	
 </Project>

@@ -1,5 +1,7 @@
 using CalorieTracker.Services;
+#if HAS_BOOKS
 using Books.Services;
+#endif
 
 public static class ServiceExtensions
 {
@@ -18,9 +20,10 @@ public static class ServiceExtensions
         services.AddScoped<DetailedMealService>();
         services.AddScoped<DetailedMealComponentService>();
 
+#if HAS_BOOKS
         // Books Section
         services.AddScoped<BookService>();
-
+#endif
 
         return services;
     }
