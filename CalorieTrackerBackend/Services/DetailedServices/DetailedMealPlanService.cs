@@ -1,10 +1,9 @@
 using CalorieTracker.DTO;
-using CalorieTracker.DTO.Constituents;
 using CalorieTracker.DTO.Requests;
-using CalorieTracker.Repositories;
 using CalorieTracker.Models;
-using CalorieTracker.Services;
-
+using CalorieTracker.Repositories;
+using CalorieTracker.Models.Detailed;
+using CalorieTracker.Helper.MatvaretabellenImport;
 
 namespace CalorieTracker.Services;
 
@@ -69,6 +68,7 @@ public class DetailedMealPlanService
         {
             Id = plan.Id,
             Name = plan.Name,
+            NutrientRecommendations = NutrientRecommendationSeed.GetRecommendationDTOs(),
             DetailedMeals = plan.DetailedMeals.Select(meal => new DetailedMealDTO
             {
                 Id = meal.Id,

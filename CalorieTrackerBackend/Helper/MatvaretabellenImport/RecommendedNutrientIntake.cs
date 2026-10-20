@@ -1,11 +1,11 @@
 ﻿namespace CalorieTracker.Helper.MatvaretabellenImport;
 
 using CalorieTracker.Models.Detailed;
-
+using CalorieTracker.DTO.Detailed;
 
 public static class NutrientRecommendationSeed
 {
-    public static readonly List<NutrientRecommendation> Recommendations = new()
+    private static readonly List<NutrientRecommendation> Recommendations = new()
     {
         // https://www.helsedirektoratet.no/rapporter/referanseverdier-for-energi-og-naeringsstoffer/anbefalinger-om-energi-og-naeringsstoffer-ved-planlegging-av-kosthold/vitaminer-og-mineraler#anbefalt-inntak-ri-av-mineraler
         // ==========================================
@@ -89,4 +89,17 @@ public static class NutrientRecommendationSeed
         new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 18, Unit = "mg NE" },
         new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 15, Unit = "mg NE" },
     };
+
+    public static List<NutrientRecommendationDTO> GetRecommendationDTOs()
+    {
+        return Recommendations.Select(x => new NutrientRecommendationDTO
+        {
+            NutrientId = x.NutrientId,
+            Gender = x.Gender,
+            MaxAge = x.MaxAge,
+            MinAge = x.MinAge,
+            Quantity = x.Quantity,
+            Unit = x.Unit
+        }).ToList();
+    }
 }
