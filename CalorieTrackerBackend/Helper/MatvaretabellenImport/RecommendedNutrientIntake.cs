@@ -64,7 +64,7 @@ public static class NutrientRecommendationSeed
         new NutrientRecommendation { NutrientId = "Zn", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 12, Unit = "mg" },
 
         // ==========================================
-        // 4. WATER-SOLUBLE VITAMINS Needs to be fact checked
+        // 4. WATER-SOLUBLE VITAMINS Fact checked
         // ==========================================
         new NutrientRecommendation { NutrientId = "Folat", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 330, Unit = "µg" },
         new NutrientRecommendation { NutrientId = "BIOT", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 40, Unit = "µg" },
