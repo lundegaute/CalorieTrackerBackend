@@ -1,7 +1,3 @@
-
-
-namespace CalorieTracker.DTO;
-
 public class ApiResponse<T>
 {
     public bool IsSuccess { get; set; }

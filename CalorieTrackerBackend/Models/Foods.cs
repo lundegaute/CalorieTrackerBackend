@@ -6,7 +6,7 @@ namespace CalorieTracker.Models;
 public class DetailedFood
 {
     public int Id { get; set; }
-    public string? FoodId { get; set;}
+    public required string FoodId { get; set;}
     public required string FoodName { get; set;}
     public string? FoodGroupId { get; set;}
     
