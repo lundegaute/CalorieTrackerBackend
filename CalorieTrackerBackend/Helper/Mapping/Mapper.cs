@@ -26,7 +26,7 @@ public static class Mapper
                 Unit = f.energy?.unit ?? null,
             },
 
-            SearchKeywords = f.searchKeywords ?? new List<string>(),
+            SearchKeywords = f.searchKeywords ?? [],
         };
     }
 

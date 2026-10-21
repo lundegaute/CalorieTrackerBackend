@@ -137,9 +137,9 @@ public class FoodRepository
             var foodsUpdated = Count<DetailedFood>(EntityState.Modified);
             var foodsUnchanged = Count<DetailedFood>(EntityState.Unchanged);
 
-            var nutrientsAdded = Count<Constituent>(EntityState.Added);
-            var nutrientsUpdated = Count<Constituent>(EntityState.Modified);
-            var nutrientsUnchanged = Count<Constituent>(EntityState.Unchanged);
+            var nutrientsAdded = Count<Nutrient>(EntityState.Added);
+            var nutrientsUpdated = Count<Nutrient>(EntityState.Modified);
+            var nutrientsUnchanged = Count<Nutrient>(EntityState.Unchanged);
 
             var foodConstAdded = Count<FoodConstituent>(EntityState.Added);
             var foodConstUpdated = Count<FoodConstituent>(EntityState.Modified);
@@ -147,7 +147,9 @@ public class FoodRepository
 
             await _context.SaveChangesAsync();
 
-            return $"Detailed foods added: {foodsAdded} | Detailed foods updated: {foodsAdded} | Detailed foods unchanged: {foodsAdded} | Nutrients Added: {nutrientsAdded} | Nutrients Updated: {nutrientsUpdated} | Nutrients unchanged: {nutrientsUnchanged} | Food Constituents added: {foodConstAdded} | Food Constituents added: {foodConstUpdated} | Food Constituents added: {foodConstUnchanged}";
+            return $"Detailed foods added: {foodsAdded} | Detailed foods modified: {foodsUpdated} | Detailed foods unchanged: {foodsUnchanged}" +
+                $" | Nutrients Added: {nutrientsAdded} | Nutrients modified: {nutrientsUpdated} | Nutrients unchanged: {nutrientsUnchanged}" +
+                $" | Food Constituents added: {foodConstAdded} | Food Constituents modified: {foodConstUpdated} | Food Constituents unchanged: {foodConstUnchanged}";
 
         }
         catch(Exception ex)
