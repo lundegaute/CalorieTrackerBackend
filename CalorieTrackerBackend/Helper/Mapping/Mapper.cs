@@ -17,15 +17,14 @@ public static class Mapper
 
             Calories = new DbCalories
             {
-                Quantity = f.calories?.quantity ?? null,
-                Unit = f.calories?.unit ?? null,
+                Quantity = f.calories?.quantity,
+                Unit = f.calories?.unit,
             },
             Energy = new DbEnergy
             {
-                Quantity = f.energy?.quantity ?? null,
-                Unit = f.energy?.unit ?? null,
+                Quantity = f.energy?.quantity,
+                Unit = f.energy?.unit,
             },
-
             SearchKeywords = f.searchKeywords ?? [],
         };
     }
@@ -45,7 +44,7 @@ public static class Mapper
             Quantity = source.energy?.quantity ?? null,
             Unit = source.energy?.unit ?? null,
         };
-        existing.SearchKeywords = source.searchKeywords ?? new List<string>();
+        existing.SearchKeywords = source.searchKeywords ?? [];
     }
 
     public static Nutrient MapConstituentToNutrient (Constituent nutrient, Matvaretabellen_Nutrients? nutData)
