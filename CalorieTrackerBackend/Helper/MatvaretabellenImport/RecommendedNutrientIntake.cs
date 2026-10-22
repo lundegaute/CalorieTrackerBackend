@@ -90,16 +90,18 @@ public static class NutrientRecommendationSeed
         new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 15, Unit = "mg NE" },
     };
 
-    public static List<NutrientRecommendationDTO> GetRecommendationDTOs()
+    public static Dictionary<string, NutrientRecommendationDTO> GetRecommendationDTOs(string gender, int age)
     {
-        return Recommendations.Select(x => new NutrientRecommendationDTO
-        {
-            NutrientId = x.NutrientId,
-            Gender = x.Gender,
-            MaxAge = x.MaxAge,
-            MinAge = x.MinAge,
-            Quantity = x.Quantity,
-            Unit = x.Unit
-        }).ToList();
+        return Recommendations
+            .Where(x => x.Gender == gender && age >= x.MinAge && age <= x.MaxAge)
+            .ToDictionary(x => x.NutrientId, x =>  new NutrientRecommendationDTO
+            {
+                NutrientId = x.NutrientId,
+                Gender = x.Gender,
+                MinAge = x.MinAge,
+                MaxAge = x.MaxAge,
+                Quantity = x.Quantity,
+                Unit = x.Unit,
+            });
     }
 }

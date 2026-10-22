@@ -68,7 +68,6 @@ public class DetailedMealPlanService
         {
             Id = plan.Id,
             Name = plan.Name,
-            NutrientRecommendations = NutrientRecommendationSeed.GetRecommendationDTOs(),
             DetailedMeals = plan.DetailedMeals.Select(meal => new DetailedMealDTO
             {
                 Id = meal.Id,

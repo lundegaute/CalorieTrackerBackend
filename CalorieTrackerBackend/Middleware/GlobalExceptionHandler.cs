@@ -54,7 +54,6 @@ public class GlobalExceptionHandler
             }
             else
             {
-                // In Production, return a generic safe message so hackers don't see your database schema details
                 errors.Add(statusCode == (int)HttpStatusCode.InternalServerError 
                     ? "An unexpected error occurred on the server." 
                     : ex.Message);

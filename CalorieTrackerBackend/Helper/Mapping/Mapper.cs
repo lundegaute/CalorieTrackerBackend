@@ -57,4 +57,10 @@ public static class Mapper
             Category = GetNutrientCategory.GetCategory(nutrient.nutrientId).ToString(),
         };
     }
+    public static void ApplyNutrientChanges(Nutrient existingNutrient, Constituent nutrient, Matvaretabellen_Nutrients nutData)
+    {
+        existingNutrient.NutrientName = nutData.name;
+        existingNutrient.DefaultUnit = nutData.unit;
+        existingNutrient.Category = GetNutrientCategory.GetCategory(nutrient.nutrientId).ToString();
+    }
 }

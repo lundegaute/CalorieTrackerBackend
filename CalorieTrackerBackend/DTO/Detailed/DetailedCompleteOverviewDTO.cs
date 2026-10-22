@@ -1,5 +1,6 @@
 using CalorieTracker.DTO.Constituents;
 using CalorieTracker.DTO.Detailed;
+using CalorieTracker.Models;
 
 namespace CalorieTracker.DTO;
 
@@ -36,7 +37,6 @@ public class DetailedCompleteOverviewDTO
         );
 
     public List<DetailedMealDTO> DetailedMeals { get; set; } = new();
-    public List<NutrientRecommendationDTO> NutrientRecommendations { get; set; } = new();
 }
 
 public class DetailedMealDTO

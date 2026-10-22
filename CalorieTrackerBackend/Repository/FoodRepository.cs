@@ -1,8 +1,7 @@
 
 using CalorieTracker.Data;
-using CalorieTracker.Helper.Mapping;
 using CalorieTracker.DTO.Requests;
-using CalorieTracker.Helper.MatvaretabellenImport;
+using CalorieTracker.Helper.Mapping;
 using CalorieTracker.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -75,7 +74,7 @@ public class FoodRepository
             n => n
         );
 
-        var dbNutrients = (await _context.Nutrients.Select(n => n.NutrientId).ToListAsync()).ToHashSet();
+        var dbNutrients = await _context.Nutrients.ToDictionaryAsync(x => x.NutrientId);
         var existingFoods = await _context.DetailedFoods
             .Include(x => x.FoodConstituents)
             .ThenInclude(x => x.Nutrient)
@@ -93,7 +92,8 @@ public class FoodRepository
                         .ToDictionary(x => x.NutrientId);
                     foreach(var nutrient in f.constituents)
                     {
-                        AddNutrientIfNotExists(dbNutrients, nutDict, nutrient);
+                        AddOrUpdateNutrientData(dbNutrients, nutDict, nutrient);
+
                         if ( existingConstituents.TryGetValue( nutrient.nutrientId, out var existingConst))
                         {
                             existingConst.Quantity = nutrient.quantity;
@@ -114,7 +114,7 @@ public class FoodRepository
                 
                     foreach(var nutrient in f.constituents)
                     {
-                        AddNutrientIfNotExists(dbNutrients, nutDict, nutrient);
+                        AddOrUpdateNutrientData(dbNutrients, nutDict, nutrient);
 
                         addFood.FoodConstituents.Add(new FoodConstituent
                         {
@@ -160,16 +160,25 @@ public class FoodRepository
     }
 
     // Private methods
-    private void AddNutrientIfNotExists(HashSet<string> dbNutrients, Dictionary<string, Matvaretabellen_Nutrients> nutDict, Constituent nutrient)
+    private bool AddOrUpdateNutrientData(
+        Dictionary<string, Nutrient> dbNutrients,
+        Dictionary<string, Matvaretabellen_Nutrients> nutDict,
+        Constituent nutrient)
     {
-        if (!dbNutrients.Contains(nutrient.nutrientId))
+        if (!nutDict.TryGetValue(nutrient.nutrientId, out var nutData))
         {
-            nutDict.TryGetValue(nutrient.nutrientId, out var nutData);
-            var newNutrient = Mapper.MapConstituentToNutrient(nutrient, nutData);
-
-            _context.Nutrients.Add(newNutrient);
-            dbNutrients.Add(nutrient.nutrientId);
+            return false;
         }
+        if (dbNutrients.TryGetValue(nutrient.nutrientId, out var existing))
+        {
+            Mapper.ApplyNutrientChanges(existing, nutrient, nutData);
+        }
+        else
+        {
+            var newNutrient = Mapper.MapConstituentToNutrient(nutrient, nutData);
+            _context.Nutrients.Add(newNutrient);
+            dbNutrients[newNutrient.NutrientId] = newNutrient;
+        }
+        return true;
     }
-
 }
