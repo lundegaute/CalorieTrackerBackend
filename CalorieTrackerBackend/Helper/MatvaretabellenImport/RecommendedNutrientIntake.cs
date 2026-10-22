@@ -1,30 +1,30 @@
 ﻿namespace CalorieTracker.Helper.MatvaretabellenImport;
 
 using CalorieTracker.Models.Detailed;
-
+using CalorieTracker.DTO.Detailed;
 
 public static class NutrientRecommendationSeed
 {
-    public static readonly List<NutrientRecommendation> Recommendations = new()
+    private static readonly List<NutrientRecommendation> Recommendations = new()
     {
         // https://www.helsedirektoratet.no/rapporter/referanseverdier-for-energi-og-naeringsstoffer/anbefalinger-om-energi-og-naeringsstoffer-ved-planlegging-av-kosthold/vitaminer-og-mineraler#anbefalt-inntak-ri-av-mineraler
         // ==========================================
-        // 1. PROXIMATES & MACRO TOTALS Needs to be fact checked
+        // 1. PROXIMATES & MACRO TOTALS Macro nutrient quantity shuld be percentage based
         // ==========================================
-        new NutrientRecommendation { NutrientId = "Vann", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 2500, Unit = "g" },
-        new NutrientRecommendation { NutrientId = "Vann", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 2000, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Vann", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 2500, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Vann", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 2000, Unit = "g" },
 
-        new NutrientRecommendation { NutrientId = "Alko", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 0, Unit = "g" },
-        new NutrientRecommendation { NutrientId = "Alko", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 0, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Alko", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 0, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Alko", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 0, Unit = "g" },
 
-        new NutrientRecommendation { NutrientId = "Protein", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 90, Unit = "g" },
-        new NutrientRecommendation { NutrientId = "Protein", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 70, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Protein", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 90, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Protein", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 70, Unit = "g" },
 
-        new NutrientRecommendation { NutrientId = "Karbo", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 300, Unit = "g" },
-        new NutrientRecommendation { NutrientId = "Karbo", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 230, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Karbo", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 300, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Karbo", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 230, Unit = "g" },
 
-        new NutrientRecommendation { NutrientId = "Fett", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 80, Unit = "g" },
-        new NutrientRecommendation { NutrientId = "Fett", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 65, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Fett", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 80, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Fett", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 65, Unit = "g" },
 
         // ==========================================
         // 2. MACRO MINERALS: Fact checked
@@ -64,29 +64,44 @@ public static class NutrientRecommendationSeed
         new NutrientRecommendation { NutrientId = "Zn", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 12, Unit = "mg" },
 
         // ==========================================
-        // 4. WATER-SOLUBLE VITAMINS Needs to be fact checked
+        // 4. WATER-SOLUBLE VITAMINS Fact checked
         // ==========================================
         new NutrientRecommendation { NutrientId = "Folat", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 330, Unit = "µg" },
-        new NutrientRecommendation { NutrientId = "BIOT", MinAge = 18, MaxAge = 70, Gender = "Any", Quantity = 40, Unit = "µg" },
+        new NutrientRecommendation { NutrientId = "BIOT", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 40, Unit = "µg" },
 
-        new NutrientRecommendation { NutrientId = "Vit B1", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 1.2, Unit = "mg" },
-        new NutrientRecommendation { NutrientId = "Vit B1", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 1.0, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Vit B1", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 1.2, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Vit B1", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 1.0, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "Vit B2", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 1.6, Unit = "mg" },
-        new NutrientRecommendation { NutrientId = "Vit B2", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 1.2, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Vit B2", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 1.6, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Vit B2", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 1.6, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "Vit B6", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 1.6, Unit = "mg" },
-        new NutrientRecommendation { NutrientId = "Vit B6", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 1.4, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Vit B6", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 1.8, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Vit B6", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 1.6, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "Vit B12", MinAge = 18, MaxAge = 70, Gender = "Any", Quantity = 4.0, Unit = "µg" },
+        new NutrientRecommendation { NutrientId = "Vit B12", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 4.0, Unit = "µg" },
 
         new NutrientRecommendation { NutrientId = "Vit C", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 110, Unit = "mg" },
         new NutrientRecommendation { NutrientId = "Vit C", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 95, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "Niacin", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 18, Unit = "mg NE" },
-        new NutrientRecommendation { NutrientId = "Niacin", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 15, Unit = "mg NE" },
+        new NutrientRecommendation { NutrientId = "Niacin", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 18, Unit = "mg NE" },
+        new NutrientRecommendation { NutrientId = "Niacin", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 15, Unit = "mg NE" },
 
-        new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 18, Unit = "mg NE" },
-        new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 70, Gender = "Female", Quantity = 15, Unit = "mg NE" },
+        new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 18, Unit = "mg NE" },
+        new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 15, Unit = "mg NE" },
     };
+
+    public static Dictionary<string, NutrientRecommendationDTO> GetRecommendationDTOs(string gender, int age)
+    {
+        return Recommendations
+            .Where(x => x.Gender == gender && age >= x.MinAge && age <= x.MaxAge)
+            .ToDictionary(x => x.NutrientId, x =>  new NutrientRecommendationDTO
+            {
+                NutrientId = x.NutrientId,
+                Gender = x.Gender,
+                MinAge = x.MinAge,
+                MaxAge = x.MaxAge,
+                Quantity = x.Quantity,
+                Unit = x.Unit,
+            });
+    }
 }

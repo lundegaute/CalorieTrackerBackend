@@ -1,6 +1,7 @@
-using System.Text.Json;
 using CalorieTracker.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Text.Json;
 
 namespace CalorieTracker.Data
 {
@@ -133,13 +134,17 @@ namespace CalorieTracker.Data
                     .WithOne()
                     .HasForeignKey(fc => fc.DetailedFoodId)
                     .OnDelete(DeleteBehavior.Restrict);
-                
+
+                var keywordComparer = new ValueComparer<List<string>>(
+                    (a, b) => a!.SequenceEqual(b!),                                   
+                    v => v.Aggregate(0, (hash, s) => HashCode.Combine(hash, s.GetHashCode())), 
+                    v => v.ToList());
                 entity.Property(df => df.SearchKeywords)
                     .HasColumnType("LONGTEXT") // Stores it as long text in MySQL
                     .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null), // C# List -> JSON String
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null) ?? new List<string>() // JSON String -> C# List
-                    );
+                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null) ?? new List<string>())
+                    .Metadata.SetValueComparer(keywordComparer);
           
             });
             

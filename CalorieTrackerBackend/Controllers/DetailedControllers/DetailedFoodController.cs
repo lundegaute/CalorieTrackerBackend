@@ -1,10 +1,8 @@
+using CalorieTracker.DTO;
+using CalorieTracker.DTO.Requests.DetailedRequests;
+using CalorieTracker.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using CalorieTracker.DTO;
-using CalorieTracker.DTO.Requests;
-using CalorieTracker.Models;
-using CalorieTracker.Services;
-using CalorieTracker.DTO.Requests.DetailedRequests;
 
 namespace CalorieTracker.Controllers;
 

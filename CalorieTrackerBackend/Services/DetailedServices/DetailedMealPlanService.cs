@@ -1,10 +1,9 @@
 using CalorieTracker.DTO;
-using CalorieTracker.DTO.Constituents;
 using CalorieTracker.DTO.Requests;
-using CalorieTracker.Repositories;
 using CalorieTracker.Models;
-using CalorieTracker.Services;
-
+using CalorieTracker.Repositories;
+using CalorieTracker.Models.Detailed;
+using CalorieTracker.Helper.MatvaretabellenImport;
 
 namespace CalorieTracker.Services;
 

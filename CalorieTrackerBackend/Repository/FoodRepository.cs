@@ -1,11 +1,9 @@
 
 using CalorieTracker.Data;
-using CalorieTracker.DTO;
 using CalorieTracker.DTO.Requests;
-using CalorieTracker.Helper.MatvaretabellenImport;
+using CalorieTracker.Helper.Mapping;
 using CalorieTracker.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Json;
 
 namespace CalorieTracker.Repositories;
 public class FoodRepository
@@ -76,87 +74,82 @@ public class FoodRepository
             n => n
         );
 
-        var detailedFoodsCounter = 0;
-        var NutrientCounter = 0;
-        var foodConstituentsCounter = 0;
-
-        var dbNutrients = (await _context.Nutrients.Select(n => n.NutrientId).ToListAsync()).ToHashSet();
-        var existingFoods = (await _context.DetailedFoods.Select(x => x.FoodId).ToListAsync()).ToHashSet();
+        var dbNutrients = await _context.Nutrients.ToDictionaryAsync(x => x.NutrientId);
+        var existingFoods = await _context.DetailedFoods
+            .Include(x => x.FoodConstituents)
+            .ThenInclude(x => x.Nutrient)
+            .ToDictionaryAsync(x => x.FoodId);
         
         try
         {
             
             foreach(var f in foods)
             {
-                // If food is already in DB, we skip it
-                if ( existingFoods.Contains(f.foodId) )
+                if ( existingFoods.TryGetValue(f.foodId, out var existingFood))
                 {
-                    continue;
-                }
-
-                var addFood = new DetailedFood
-                {
-                    FoodId = f.foodId,
-                    FoodName = f.foodName,
-                    FoodGroupId = f.foodGroupId,
-                    
-                    Calories = new DbCalories
+                    Mapper.MapUpdateExistingFoodFromFood(f, existingFood);
+                    var existingConstituents = existingFood.FoodConstituents
+                        .ToDictionary(x => x.NutrientId);
+                    foreach(var nutrient in f.constituents)
                     {
-                        Quantity = f.calories?.quantity ?? null,
-                        Unit = f.calories?.unit ?? null,
-                    },
-                    Energy = new DbEnergy
-                    {
-                        Quantity = f.energy?.quantity ?? null,
-                        Unit = f.energy?.unit ?? null,
-                    },
+                        AddOrUpdateNutrientData(dbNutrients, nutDict, nutrient);
 
-                    SearchKeywords = f.searchKeywords ?? new List<string>(),
-                };
-
-                _context.DetailedFoods.Add(addFood);
-                //await _context.SaveChangesAsync(); // Can i remove this, to make this method faster?
-                detailedFoodsCounter += 1;
-                
-                foreach(var nutrient in f.constituents)
-                {
-                    // This block adds the Nutrient to the DB
-                    if ( !dbNutrients.Contains(nutrient.nutrientId))
-                    {
-                        nutDict.TryGetValue(nutrient.nutrientId, out var nutData);
-
-                        var newNutrient = new Nutrient
+                        if ( existingConstituents.TryGetValue( nutrient.nutrientId, out var existingConst))
                         {
-                            NutrientId = nutrient.nutrientId,
-                            NutrientName = nutData?.name ?? nutrient.nutrientId,
-                            DefaultUnit = nutData?.unit ?? nutrient.unit,
-                            Category = GetNutrientCategory.GetCategory(nutrient.nutrientId).ToString(),
-                        };
-
-                        _context.Nutrients.Add(newNutrient);
-                        NutrientCounter += 1;
-
-                        dbNutrients.Add(nutrient.nutrientId);
+                            existingConst.Quantity = nutrient.quantity;
+                        } else
+                        {
+                            existingFood.FoodConstituents.Add(new FoodConstituent
+                            {
+                                NutrientId = nutrient.nutrientId,
+                                Quantity = nutrient.quantity,
+                            });
+                        }
                     }
 
-                    var newFoodConstituent = new FoodConstituent
+                } else
+                {
+                    var addFood = Mapper.MapFoodToDetailedFood(f);
+
+                
+                    foreach(var nutrient in f.constituents)
                     {
-                        DetailedFoodId = addFood.Id,
-                        NutrientId = nutrient.nutrientId,
-                        Quantity = nutrient.quantity ?? null,
-                    };
-                    addFood.FoodConstituents.Add(new FoodConstituent
-                    {
-                        NutrientId = nutrient.nutrientId,
-                        Quantity = nutrient.quantity,
-                    });
-                    
-                    foodConstituentsCounter += 1;
+                        AddOrUpdateNutrientData(dbNutrients, nutDict, nutrient);
+
+                        addFood.FoodConstituents.Add(new FoodConstituent
+                        {
+                            NutrientId = nutrient.nutrientId,
+                            Quantity = nutrient.quantity,
+                        });
+                    }
+
+                    _context.DetailedFoods.Add(addFood);
                 }
+
             }
 
+            var entries = _context.ChangeTracker.Entries().ToList();
+
+            int Count<T>(EntityState state) => 
+                entries.Count(e => e.Entity is T && e.State == state);
+
+            var foodsAdded = Count<DetailedFood>(EntityState.Added);
+            var foodsUpdated = Count<DetailedFood>(EntityState.Modified);
+            var foodsUnchanged = Count<DetailedFood>(EntityState.Unchanged);
+
+            var nutrientsAdded = Count<Nutrient>(EntityState.Added);
+            var nutrientsUpdated = Count<Nutrient>(EntityState.Modified);
+            var nutrientsUnchanged = Count<Nutrient>(EntityState.Unchanged);
+
+            var foodConstAdded = Count<FoodConstituent>(EntityState.Added);
+            var foodConstUpdated = Count<FoodConstituent>(EntityState.Modified);
+            var foodConstUnchanged = Count<FoodConstituent>(EntityState.Unchanged);
+
             await _context.SaveChangesAsync();
-            return $"Detailed Foods added: {detailedFoodsCounter} | Nutrients Added: {NutrientCounter} | Food Constituents added: {foodConstituentsCounter}";
+
+            return $"Detailed foods added: {foodsAdded} | Detailed foods modified: {foodsUpdated} | Detailed foods unchanged: {foodsUnchanged}" +
+                $" | Nutrients Added: {nutrientsAdded} | Nutrients modified: {nutrientsUpdated} | Nutrients unchanged: {nutrientsUnchanged}" +
+                $" | Food Constituents added: {foodConstAdded} | Food Constituents modified: {foodConstUpdated} | Food Constituents unchanged: {foodConstUnchanged}";
 
         }
         catch(Exception ex)
@@ -164,8 +157,28 @@ public class FoodRepository
             Console.WriteLine($"Error adding Matvaretabellen to database. Error: {ex.Message}");
             throw new InvalidOperationException($"Exception: {ex.Message}");
         }
-
-
     }
 
+    // Private methods
+    private bool AddOrUpdateNutrientData(
+        Dictionary<string, Nutrient> dbNutrients,
+        Dictionary<string, Matvaretabellen_Nutrients> nutDict,
+        Constituent nutrient)
+    {
+        if (!nutDict.TryGetValue(nutrient.nutrientId, out var nutData))
+        {
+            return false;
+        }
+        if (dbNutrients.TryGetValue(nutrient.nutrientId, out var existing))
+        {
+            Mapper.ApplyNutrientChanges(existing, nutrient, nutData);
+        }
+        else
+        {
+            var newNutrient = Mapper.MapConstituentToNutrient(nutrient, nutData);
+            _context.Nutrients.Add(newNutrient);
+            dbNutrients[newNutrient.NutrientId] = newNutrient;
+        }
+        return true;
+    }
 }

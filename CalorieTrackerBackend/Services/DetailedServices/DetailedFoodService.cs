@@ -27,6 +27,7 @@ public class DetailedFoodService
         var newDetailedFood = new DetailedFood
         {
             FoodName = req.FoodName,
+            FoodId = $"Custom-{Guid.NewGuid():N}",
             Calories = new DbCalories
             {
                 Quantity = req.Calories.Quantity,

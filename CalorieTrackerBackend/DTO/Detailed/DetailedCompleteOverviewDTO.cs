@@ -1,4 +1,6 @@
 using CalorieTracker.DTO.Constituents;
+using CalorieTracker.DTO.Detailed;
+using CalorieTracker.Models;
 
 namespace CalorieTracker.DTO;
 
