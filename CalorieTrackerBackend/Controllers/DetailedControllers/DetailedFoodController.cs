@@ -1,4 +1,5 @@
 using CalorieTracker.DTO;
+using CalorieTracker.DTO.Detailed;
 using CalorieTracker.DTO.Requests.DetailedRequests;
 using CalorieTracker.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -23,11 +24,18 @@ public class DetailedFoodController : ControllerBase
     public async Task<ActionResult<ApiResponse<List<DetailedFoodDTO>>>> DetailedFoodSearch([FromBody] string search)
     {
         var apiResponse = await _detailedFoodService.DetailedFoodSearch(search);
-        
         return Ok(apiResponse);
     }
 
 
+    [HttpGet("recommendations")]
+    public async Task<ActionResult<ApiResponse<Dictionary<string, List<NutrientRecommendationDTO>>>>> GetNutrientRecommendations()
+    {
+        var userId = User.GetUserId();
+        var response = _detailedFoodService.GetNutrientRecommendations();
+
+        return Ok(response);
+    }
 
 
     /// <summary>

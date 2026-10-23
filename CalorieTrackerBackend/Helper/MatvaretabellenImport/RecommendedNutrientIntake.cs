@@ -1,7 +1,8 @@
-﻿namespace CalorieTracker.Helper.MatvaretabellenImport;
-
-using CalorieTracker.Models.Detailed;
+﻿using CalorieTracker.Models.Detailed;
 using CalorieTracker.DTO.Detailed;
+using CalorieTracker.Helper.Mapping;
+
+namespace CalorieTracker.Helper.MatvaretabellenImport;
 
 public static class NutrientRecommendationSeed
 {
@@ -29,18 +30,18 @@ public static class NutrientRecommendationSeed
         // ==========================================
         // 2. MACRO MINERALS: Fact checked
         // ==========================================
-        new NutrientRecommendation { NutrientId = "Ca", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 950, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Ca", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 950, Unit = "mg" },
 
         new NutrientRecommendation { NutrientId = "Mg", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 350, Unit = "mg" },
         new NutrientRecommendation { NutrientId = "Mg", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 300, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "K", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 3500, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "K", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 3500, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "P", MinAge = 18, MaxAge = 24, Gender = "Any", Quantity = 550, Unit = "mg" },
-        new NutrientRecommendation { NutrientId = "P", MinAge = 25, MaxAge = 120, Gender = "Any", Quantity = 520, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "P", MinAge = 18, MaxAge = 24, Gender = "Both", Quantity = 550, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "P", MinAge = 25, MaxAge = 120, Gender = "Both", Quantity = 520, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "Na", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 2300, Unit = "mg" },
-        new NutrientRecommendation { NutrientId = "NaCl", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 5.75, Unit = "g" },
+        new NutrientRecommendation { NutrientId = "Na", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 2300, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "NaCl", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 5.75, Unit = "g" },
 
         // ==========================================
         // 3. TRACE MINERALS: Fact checked
@@ -50,9 +51,9 @@ public static class NutrientRecommendationSeed
         new NutrientRecommendation { NutrientId = "Fe", MinAge = 71, MaxAge = 120, Gender = "Female", Quantity = 7, Unit = "mg" },
         new NutrientRecommendation { NutrientId = "Fe", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 9, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "Cu", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 0.9, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Cu", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 0.9, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "I", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 150, Unit = "µg" }, // Jodd
+        new NutrientRecommendation { NutrientId = "I", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 150, Unit = "µg" }, // Jodd
 
         new NutrientRecommendation { NutrientId = "Se", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 75, Unit = "µg" },
         new NutrientRecommendation { NutrientId = "Se", MinAge = 18, MaxAge = 70, Gender = "Male", Quantity = 90, Unit = "µg" },
@@ -66,8 +67,8 @@ public static class NutrientRecommendationSeed
         // ==========================================
         // 4. WATER-SOLUBLE VITAMINS Fact checked
         // ==========================================
-        new NutrientRecommendation { NutrientId = "Folat", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 330, Unit = "µg" },
-        new NutrientRecommendation { NutrientId = "BIOT", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 40, Unit = "µg" },
+        new NutrientRecommendation { NutrientId = "Folat", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 330, Unit = "µg" },
+        new NutrientRecommendation { NutrientId = "BIOT", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 40, Unit = "µg" },
 
         new NutrientRecommendation { NutrientId = "Vit B1", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 1.2, Unit = "mg" },
         new NutrientRecommendation { NutrientId = "Vit B1", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 1.0, Unit = "mg" },
@@ -78,7 +79,7 @@ public static class NutrientRecommendationSeed
         new NutrientRecommendation { NutrientId = "Vit B6", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 1.8, Unit = "mg" },
         new NutrientRecommendation { NutrientId = "Vit B6", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 1.6, Unit = "mg" },
 
-        new NutrientRecommendation { NutrientId = "Vit B12", MinAge = 18, MaxAge = 120, Gender = "Any", Quantity = 4.0, Unit = "µg" },
+        new NutrientRecommendation { NutrientId = "Vit B12", MinAge = 18, MaxAge = 120, Gender = "Both", Quantity = 4.0, Unit = "µg" },
 
         new NutrientRecommendation { NutrientId = "Vit C", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 110, Unit = "mg" },
         new NutrientRecommendation { NutrientId = "Vit C", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 95, Unit = "mg" },
@@ -88,20 +89,27 @@ public static class NutrientRecommendationSeed
 
         new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 18, Unit = "mg NE" },
         new NutrientRecommendation { NutrientId = "NIAEQ", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 15, Unit = "mg NE" },
+    
+        // ==========================================
+        // 4. Fat-SOLUBLE VITAMINS not fact checked !!!!!!!!!!!!!!!!!!
+        // ==========================================
+        new NutrientRecommendation { NutrientId = "Vit A", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 800, Unit = "µg" },
+        new NutrientRecommendation { NutrientId = "Vit A", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 700, Unit = "µg" },
+        
+        new NutrientRecommendation { NutrientId = "Vit D", MinAge = 18, MaxAge = 70, Gender = "Both", Quantity = 10, Unit = "µg" },
+        new NutrientRecommendation { NutrientId = "Vit D", MinAge = 71, MaxAge = 120, Gender = "Both", Quantity = 20, Unit = "µg" },
+        
+        new NutrientRecommendation { NutrientId = "Vit E", MinAge = 18, MaxAge = 120, Gender = "Male", Quantity = 11, Unit = "mg" },
+        new NutrientRecommendation { NutrientId = "Vit E", MinAge = 18, MaxAge = 120, Gender = "Female", Quantity = 9, Unit = "mg" },
     };
 
-    public static Dictionary<string, NutrientRecommendationDTO> GetRecommendationDTOs(string gender, int age)
+    public static Dictionary<string, List<NutrientRecommendationDTO>> GetRecommendationDTOs()
     {
         return Recommendations
-            .Where(x => x.Gender == gender && age >= x.MinAge && age <= x.MaxAge)
-            .ToDictionary(x => x.NutrientId, x =>  new NutrientRecommendationDTO
-            {
-                NutrientId = x.NutrientId,
-                Gender = x.Gender,
-                MinAge = x.MinAge,
-                MaxAge = x.MaxAge,
-                Quantity = x.Quantity,
-                Unit = x.Unit,
-            });
+            .GroupBy(x => x.NutrientId)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(x => Mapper.MapToNutrientRecommendationDTO(x))
+                .ToList());
     }
 }

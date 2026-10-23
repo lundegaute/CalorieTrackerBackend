@@ -1,6 +1,8 @@
-﻿using CalorieTracker.DTO.Requests;
+﻿using CalorieTracker.DTO.Detailed;
+using CalorieTracker.DTO.Requests;
 using CalorieTracker.Helper.MatvaretabellenImport;
 using CalorieTracker.Models;
+using CalorieTracker.Models.Detailed;
 
 namespace CalorieTracker.Helper.Mapping;
 
@@ -45,6 +47,19 @@ public static class Mapper
             Unit = source.energy?.unit ?? null,
         };
         existing.SearchKeywords = source.searchKeywords ?? [];
+    }
+
+    public static NutrientRecommendationDTO MapToNutrientRecommendationDTO(NutrientRecommendation nutRec)
+    {
+        return new NutrientRecommendationDTO
+        {
+            NutrientId = nutRec.NutrientId,
+            Gender = nutRec.Gender,
+            MaxAge = nutRec.MaxAge,
+            MinAge = nutRec.MinAge,
+            Unit = nutRec.Unit,
+            Quantity = nutRec.Quantity,
+        };
     }
 
     public static Nutrient MapConstituentToNutrient (Constituent nutrient, Matvaretabellen_Nutrients? nutData)

@@ -1,9 +1,13 @@
 
 using CalorieTracker.DTO;
+
 using CalorieTracker.Repositories;
 using CalorieTracker.DTO.Requests;
 using CalorieTracker.Models;
 using CalorieTracker.DTO.Requests.DetailedRequests;
+using CalorieTracker.DTO.Detailed;
+using CalorieTracker.Helper.MatvaretabellenImport;
+using CalorieTracker.Models.Detailed;
 
 namespace CalorieTracker.Services;
 public class DetailedFoodService
@@ -97,4 +101,11 @@ public class DetailedFoodService
         return apiResponse;
     }
 
+
+    public ApiResponse<Dictionary<string, List<NutrientRecommendationDTO>>> GetNutrientRecommendations()
+    {
+        var response = NutrientRecommendationSeed.GetRecommendationDTOs();
+        return ApiResponse<Dictionary<string, List<NutrientRecommendationDTO>>>.Success(response, 200);
+
+    }
 }
