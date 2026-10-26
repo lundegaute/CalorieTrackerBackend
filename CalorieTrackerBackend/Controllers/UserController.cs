@@ -1,11 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using CalorieTracker.Services;
-using Microsoft.Extensions.Options;
 using CalorieTracker.Configuration;
 using CalorieTracker.DTO;
-using Swashbuckle.AspNetCore.Filters;
-using CalorieTracker.SwaggerExamples;
 using CalorieTracker.HelperMethods;
+using CalorieTracker.Services;
+using CalorieTracker.SwaggerExamples;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace CalorieTracker.Controllers
 {
@@ -22,6 +23,15 @@ namespace CalorieTracker.Controllers
             _jwtSettings = jwtSettings.Value;
         }
 
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<ActionResult<ApiResponse<ResponseUserDTO>>> CheckStatus()
+        {
+            var userID = User.GetUserId();
+            var userDTO = await _authService.GetUser(userID);
+            var res = ApiResponse<ResponseUserDTO>.Success(userDTO, 200);
+            return Ok(res);
+        }
 
         /// <summary>
         /// Register a new user to the Sql database
@@ -99,10 +109,10 @@ namespace CalorieTracker.Controllers
             Response.Cookies.Append("token", "", new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, // ✅ Set to true in production
-                SameSite = SameSiteMode.Lax, // ✅ Lax is fine for dev; use None + Secure in prod
-                Path = "/", // ✅ Must match the original path used during login
-                Expires = DateTime.UtcNow.AddDays(-1) // ✅ Force expiration
+                Secure = false, // Set to true in production
+                SameSite = SameSiteMode.Lax, // Lax is fine for dev; use None + Secure in prod
+                Path = "/", // Must match the original path used during login
+                Expires = DateTime.UtcNow.AddDays(-1) // Force expiration
             });
             var response = ResponseBuilder.BuildGenericResponse(["User logged out successfully."], "Authorization", "Logout", 200);
             return Ok(response);

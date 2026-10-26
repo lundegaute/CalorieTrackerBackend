@@ -25,13 +25,18 @@ namespace CalorieTracker.Services
             _context = context;
         }
 
-        public async Task<User> GetUser(int userID)
+        public async Task<ResponseUserDTO> GetUser(int userID)
         {
             var user = await _context.Users.FindAsync(userID);
             if ( user is null )
                 throw new KeyNotFoundException("User not found");
                 
-            return user;
+            return new ResponseUserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Role = user.Role,
+            };
         }
 
         public async Task RegisterUserAsync(RegisterUserDTO user)

@@ -48,7 +48,7 @@ public class DetailedMealPlanService
         var newPlan = new DetailedMealPlan
         {
             Name = request.Name,
-            User = user
+            UserId = user.Id
         };
         var response = await _detailedMealPlanRepository.AddDetailedMealPlan(newPlan);
 

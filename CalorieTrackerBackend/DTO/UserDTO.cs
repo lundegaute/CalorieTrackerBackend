@@ -24,8 +24,8 @@ namespace CalorieTracker.DTO
     }
     public class ResponseUserDTO
     {
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string Role { get; set; }
+        public required int Id { get; set; }
+        public required string Email { get; set; }
+        public required string Role { get; set; }
     }
 }
