@@ -4,7 +4,6 @@ using Books.DataContext;
 using CalorieTracker.Configuration;
 using CalorieTracker.Data;
 using CalorieTracker.Middleware;
-using CalorieTracker.Seed;
 using CalorieTracker.SwaggerExamples;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -153,10 +152,12 @@ var app = builder.Build();
 // Auto-migrate database on startup (add this section)
 using (var scope = app.Services.CreateScope())
 {
+    var bookContext = scope.ServiceProvider.GetRequiredService<BooksDataContext>();
     var context = scope.ServiceProvider.GetRequiredService<DataContext>();
     try
     {
         context.Database.Migrate();
+        bookContext.Database.Migrate();
         //await DetailedSeed.SeedDevelopmentData(context);
 
     }
