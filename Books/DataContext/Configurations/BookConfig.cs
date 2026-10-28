@@ -17,13 +17,10 @@ public class BookConfig : BaseEntityConfiguration<Book>
         builder.Property(b => b.Series)
             .HasMaxLength(100);
 
-        builder.Property(b => b.Pages)
-            .IsRequired();
+        builder.Property(b => b.Pages);
 
-        builder.Property(b => b.StartedReading)
-            .IsRequired();
-        builder.Property(b => b.EndedReading)
-            .IsRequired();
+        builder.Property(b => b.StartedReading);
+        builder.Property(b => b.EndedReading);
 
         builder.Property(b => b.ReleaseYear);
 

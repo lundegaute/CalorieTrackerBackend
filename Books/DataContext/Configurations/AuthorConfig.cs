@@ -11,16 +11,13 @@ public class AuthorConfiguration: BaseEntityConfiguration<Author>
         base.Configure(entity);
 
         entity.Property(x => x.FirstName)
-            .IsRequired()
             .HasMaxLength(100);
 
         entity.HasIndex(x => x.LastName);
         entity.Property(x => x.LastName)
-            .IsRequired()
             .HasMaxLength(100);
 
-        entity.Property(x => x.Birth)
-            .IsRequired();
+        entity.Property(x => x.Birth);
 
         entity.Property(x => x.WebUrl);
     }

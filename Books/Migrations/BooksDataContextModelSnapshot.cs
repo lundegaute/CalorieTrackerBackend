@@ -26,7 +26,6 @@ namespace Books.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Birth")
-                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -70,7 +69,6 @@ namespace Books.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("EndedReading")
-                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("GenreId")
@@ -87,7 +85,6 @@ namespace Books.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime?>("StartedReading")
-                        .IsRequired()
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Title")

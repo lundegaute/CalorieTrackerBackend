@@ -23,10 +23,13 @@ public class BookController : ControllerBase
     [HttpGet("GetBooks")]
     public async Task<ActionResult<ApiResponse<string>>> GetBooks()
     {
-        var books = await _bookService.GetBooks();
+        var userID = User.GetUserId();
+
+        var books = await _bookService.GetBooks(userID);
 
         return Ok(books);
     }
+
     [HttpPost("AddBook")]
     public async Task<ActionResult<ApiResponse<string>>> AddBook()
     {
@@ -34,6 +37,7 @@ public class BookController : ControllerBase
 
         return Ok(books);
     }
+
     [HttpPut("UpdateBook")]
     public async Task<ActionResult<ApiResponse<string>>> UpdateBook()
     {
@@ -41,6 +45,7 @@ public class BookController : ControllerBase
 
         return Ok(books);
     }
+
     [HttpDelete("DeleteBook")]
     public async Task<ActionResult<ApiResponse<string>>> DeleteBook()
     {

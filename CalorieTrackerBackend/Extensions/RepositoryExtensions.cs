@@ -1,5 +1,9 @@
 using CalorieTracker.Repositories;
+using Books.Services;
 
+#if HAS_BOOKS
+using Books.Repository;
+#endif
 public static class RepositoryExtensions
 {
     public static IServiceCollection AddMyRepositoryExtensions(this IServiceCollection services )
@@ -10,6 +14,13 @@ public static class RepositoryExtensions
         services.AddScoped<DetailedMealPlanRepository>();
         services.AddScoped<DetailedMealRepository>();
         services.AddScoped<DetailedMealComponentRepository>();
+
+
+        // Books Section
+        #if HAS_BOOKS
+                services.AddScoped<BookRepository>();
+        #endif
+
 
         return services;
     }
