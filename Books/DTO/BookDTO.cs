@@ -15,20 +15,20 @@ public class BookDTO
     public GenreDTO? Genre { get; set; }
     public string? Series { get; set; }
     public int Pages { get; set; }
-    public DateTime? StartedReading { get; set; }
-    public DateTime? EndedReading { get; set; }
+    public DateOnly? StartedReading { get; set; }
+    public DateOnly? EndedReading { get; set; }
     public int ReleaseYear { get; set; }
 }
 
-public class AuthorDTO : BaseModel
+public class AuthorDTO
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
-    public DateTime? Birth { get; set; }
+    public DateOnly? Birth { get; set; }
     public string? WebUrl { get; set; }
 }
 
-public class GenreDTO : BaseModel
+public class GenreDTO
 {
     public required string Name { get; set; }
 }

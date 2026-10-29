@@ -1,8 +1,9 @@
 ﻿#if HAS_BOOKS
 using Books.Services;
-using Shared.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Books.DTO;
+using Books.DTO.Requests;
 
 
 namespace CalorieTracker.Controllers.BookControllers;
@@ -21,19 +22,18 @@ public class BookController : ControllerBase
 
 
     [HttpGet("GetBooks")]
-    public async Task<ActionResult<ApiResponse<string>>> GetBooks()
+    public async Task<ActionResult<ApiResponse<List<BookDTO>>>> GetBooks()
     {
         var userID = User.GetUserId();
-
         var books = await _bookService.GetBooks(userID);
-
         return Ok(books);
     }
 
     [HttpPost("AddBook")]
-    public async Task<ActionResult<ApiResponse<string>>> AddBook()
+    public async Task<ActionResult<ApiResponse<string>>> AddBook([FromBody] AddBookRequest req)
     {
-        var books = await _bookService.GetBooks();
+        var userID = User.GetUserId();
+        var books = await _bookService.GetBooks(userID);
 
         return Ok(books);
     }
@@ -41,7 +41,8 @@ public class BookController : ControllerBase
     [HttpPut("UpdateBook")]
     public async Task<ActionResult<ApiResponse<string>>> UpdateBook()
     {
-        var books = await _bookService.GetBooks();
+        var userID = User.GetUserId();
+        var books = await _bookService.GetBooks(userID);
 
         return Ok(books);
     }
@@ -49,7 +50,8 @@ public class BookController : ControllerBase
     [HttpDelete("DeleteBook")]
     public async Task<ActionResult<ApiResponse<string>>> DeleteBook()
     {
-        var books = await _bookService.GetBooks();
+        var userID = User.GetUserId();
+        var books = await _bookService.GetBooks(userID);
 
         return Ok(books);
     }

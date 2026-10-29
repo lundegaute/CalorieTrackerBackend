@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Books.Models;
+using Books.Models.Interfaces;
 
 namespace Books.DataContext;
 
@@ -13,25 +14,25 @@ public class BooksDataContext : DbContext
 
 
     // These two make sure every object is saved or updated with correct CreatedAt and UpdatedAt properties
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override Task<int> SaveChangesAsync(bool accepAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
         UpdateAuditTimestamps();
-        return base.SaveChangesAsync(cancellationToken);
+        return base.SaveChangesAsync(accepAllChangesOnSuccess, cancellationToken);
     }
 
-    public override int SaveChanges()
+    public override int SaveChanges(bool accepAllChangesOnSuccess)
     {
         UpdateAuditTimestamps();
-        return base.SaveChanges();
+        return base.SaveChanges(accepAllChangesOnSuccess);
     }
 
     private void UpdateAuditTimestamps()
     {
-        var entries = ChangeTracker.Entries<BaseModel>();
+        var entries = ChangeTracker.Entries<IAuditable>();
+        var now = DateTime.UtcNow;
 
         foreach (var entry in entries)
         {
-            var now = DateTime.UtcNow;
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedAt = now;

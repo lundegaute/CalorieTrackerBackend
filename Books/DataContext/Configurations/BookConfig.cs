@@ -9,7 +9,8 @@ public class BookConfig : BaseEntityConfiguration<Book>
     public override void Configure(EntityTypeBuilder<Book> builder)
     {
         base.Configure(builder);
-
+        builder.Property(x => x.UserId)
+            .IsRequired();
         builder.Property(b => b.Title)
             .IsRequired()
             .HasMaxLength(100);

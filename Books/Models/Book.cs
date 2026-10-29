@@ -4,6 +4,7 @@ namespace Books.Models;
 
 public class Book : BaseModel
 {
+    public int UserId { get; set; }
     public required string Title { get; set; }
 
     public int AuthorId { get; set; }
@@ -14,8 +15,8 @@ public class Book : BaseModel
 
     public string? Series {  get; set; }
     public int Pages { get; set; }
-    public DateTime? StartedReading { get; set; }
-    public DateTime? EndedReading { get; set; }
+    public DateOnly? StartedReading { get; set; }
+    public DateOnly? EndedReading { get; set; }
     public int ReleaseYear { get; set; }
 }
 
@@ -23,7 +24,7 @@ public class Author : BaseModel
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
-    public DateTime? Birth {  get; set; }
+    public DateOnly? Birth {  get; set; }
     public string? WebUrl { get; set; }
 }
 

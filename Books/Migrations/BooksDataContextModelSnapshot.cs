@@ -25,8 +25,8 @@ namespace Books.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("Birth")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly?>("Birth")
+                        .HasColumnType("date");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -68,8 +68,8 @@ namespace Books.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("EndedReading")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly?>("EndedReading")
+                        .HasColumnType("date");
 
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
@@ -84,8 +84,8 @@ namespace Books.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<DateTime?>("StartedReading")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly?>("StartedReading")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -94,6 +94,9 @@ namespace Books.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -123,6 +126,9 @@ namespace Books.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Genres");
                 });

@@ -1,5 +1,7 @@
 #if HAS_BOOKS
 using Books.DataContext;
+using Books.DataContext.Seed;
+
 #endif
 using CalorieTracker.Configuration;
 using CalorieTracker.Data;
@@ -158,7 +160,8 @@ using (var scope = app.Services.CreateScope())
     {
         context.Database.Migrate();
         bookContext.Database.Migrate();
-        //await DetailedSeed.SeedDevelopmentData(context);
+        // await DetailedSeed.SeedDevelopmentData(context);
+        await AuthorAndGenreSeed.SeedDefaultData(bookContext);
 
     }
     catch (Exception ex)
