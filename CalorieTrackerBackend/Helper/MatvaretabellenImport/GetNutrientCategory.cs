@@ -22,7 +22,7 @@ public static class GetNutrientCategory
 
             // Fat-Soluble Vitamins & Carotenoids (Including MK4-MK13 variants)
             "B-karo" or "CAROTENS" or "CARTA" or "CRYPXA" or "CRYPXB"
-                or "CHOCAL" or "CHOCALOH" or "ERGCAL" or "ERGESTR" or "ERGSTROH"
+                or "CHOCAL" or "CHOCALOH" or "ERGCAL" or "ERGSTR" or "ERGSTROH"
                 or "Retinol" or "Vit A" or "Vit A RE" or "Vit D" or "Vit E"
                 or "MK4" or "MK5" or "MK6" or "MK7" or "MK8" or "MK9"
                 or "MK10" or "MK11" or "MK12" or "MK13" => NutrientCategory.FatSolubleVitamin,
@@ -30,13 +30,13 @@ public static class GetNutrientCategory
             // Lipids, Fatty Acids & Sterols
             var id when id.StartsWith("C1") || id.StartsWith("C2")
                 || id == "Mettet" || id == "Enumet" || id == "Flerum"
-                || id == "Trans" || id == "Kolest" || id == "LACS"
+                || id == "Trans" || id == "Kolest"
                 || id == "Omega-3" || id == "Omega-6" => NutrientCategory.LipidProfile,
 
             // Carbohydrates, Sugars & Fibers
             "Fiber" or "Stivel" or "SUCS" or "SUGAN" or "Sukker"
                 or "Mono+Di" or "FRUS" or "GALS" or "GLUS" or "ISOMALT"
-                or "MALS" or "MANTL" or "POLYLP" or "POLY" => NutrientCategory.CarbProfile,
+                or "MALS" or "MANTL" or "POLYL" or "POLY" or "LACS" => NutrientCategory.CarbProfile,
 
             // Catch-all if any remain
             _ => NutrientCategory.Other

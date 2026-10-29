@@ -3,6 +3,7 @@ using System;
 using CalorieTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -11,16 +12,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CalorieTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260604073306_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20261029110011_InitialAddWithPomeloSql")]
+    partial class InitialAddWithPomeloSql
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("CalorieTracker.Models.DetailedFood", b =>
                 {
@@ -28,12 +31,12 @@ namespace CalorieTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("FoodGroupId")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("FoodId")
-                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("FoodName")
@@ -61,6 +64,8 @@ namespace CalorieTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("DetailedMealPlanId")
                         .HasColumnType("int");
 
@@ -80,6 +85,8 @@ namespace CalorieTracker.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DetailedFoodId")
                         .HasColumnType("int");
@@ -105,6 +112,8 @@ namespace CalorieTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -124,6 +133,8 @@ namespace CalorieTracker.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DetailedFoodId")
                         .HasColumnType("int");
@@ -149,6 +160,8 @@ namespace CalorieTracker.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<double>("Calories")
                         .HasColumnType("double");
@@ -183,6 +196,8 @@ namespace CalorieTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("FoodId")
                         .HasColumnType("int");
 
@@ -206,6 +221,8 @@ namespace CalorieTracker.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("MealPlanId")
                         .HasColumnType("int");
@@ -232,6 +249,8 @@ namespace CalorieTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -252,6 +271,7 @@ namespace CalorieTracker.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Category")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
@@ -274,6 +294,8 @@ namespace CalorieTracker.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()

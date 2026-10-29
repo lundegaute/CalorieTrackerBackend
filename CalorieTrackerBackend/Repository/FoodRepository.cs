@@ -145,6 +145,24 @@ public class FoodRepository
             var foodConstUpdated = Count<FoodConstituent>(EntityState.Modified);
             var foodConstUnchanged = Count<FoodConstituent>(EntityState.Unchanged);
 
+            var knownIds = _context.ChangeTracker.Entries<Nutrient>()
+                .Select(e => e.Entity.NutrientId)
+                .ToHashSet();
+
+            // New constituents whose nutrient is neither in the DB nor being added
+            var missing = _context.ChangeTracker.Entries<FoodConstituent>()
+                .Where(e => e.State == EntityState.Added)
+                .Select(e => e.Entity.NutrientId)
+                .Where(id => !knownIds.Contains(id))
+                .Distinct()
+                .ToList();
+
+
+            Console.WriteLine($"Constituents with unknown nutrient: {string.Join(", ", missing)}");
+            if (missing.Count > 0)
+                throw new InvalidOperationException(
+                    $"Constituents reference unknown nutrients: {string.Join(", ", missing)}");
+
             await _context.SaveChangesAsync();
 
             return $"Detailed foods added: {foodsAdded} | Detailed foods modified: {foodsUpdated} | Detailed foods unchanged: {foodsUnchanged}" +
@@ -160,18 +178,17 @@ public class FoodRepository
     }
 
     // Private methods
-    private bool AddOrUpdateNutrientData(
+    private void AddOrUpdateNutrientData(
         Dictionary<string, Nutrient> dbNutrients,
         Dictionary<string, Matvaretabellen_Nutrients> nutDict,
         Constituent nutrient)
     {
-        if (!nutDict.TryGetValue(nutrient.nutrientId, out var nutData))
-        {
-            return false;
-        }
+        nutDict.TryGetValue(nutrient.nutrientId, out var nutData);
+        
         if (dbNutrients.TryGetValue(nutrient.nutrientId, out var existing))
         {
-            Mapper.ApplyNutrientChanges(existing, nutrient, nutData);
+            if (nutData is not null)
+                Mapper.ApplyNutrientChanges(existing, nutrient, nutData);
         }
         else
         {
@@ -179,6 +196,5 @@ public class FoodRepository
             _context.Nutrients.Add(newNutrient);
             dbNutrients[newNutrient.NutrientId] = newNutrient;
         }
-        return true;
     }
 }

@@ -19,18 +19,19 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Connecting to MySQL database
+// Connecting to MySQL database. If this version does not work on seperate computers, use the ServerVersion.AutoDetect(connectionString)
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 46)); // Run SELECT VERSION(); in mysql workbench to get the current verison
 var connectionString =
     builder.Configuration.GetConnectionString("AZURE_MYSQL_CONNECTIONSTRING") ??
     builder.Configuration.GetConnectionString("CalorieTrackerConnection") ??
     throw new InvalidOperationException("CalorieTracker Connection string not found.");
-builder.Services.AddDbContext<DataContext>(options => options.UseMySQL(connectionString));
+builder.Services.AddDbContext<DataContext>(options => options.UseMySql(connectionString, serverVersion));
 
 #if HAS_BOOKS
 var booksConnectionString =
     builder.Configuration.GetConnectionString("BookTrackerConnection") ??
     throw new InvalidOperationException("BookTracker connection string not found");
-builder.Services.AddDbContext<BooksDataContext>(options => options.UseMySQL(booksConnectionString));
+builder.Services.AddDbContext<BooksDataContext>(options => options.UseMySql(booksConnectionString, serverVersion));
 #endif
 
 builder.Services.AddControllers()
