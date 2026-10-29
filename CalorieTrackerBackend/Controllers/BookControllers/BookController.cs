@@ -33,9 +33,14 @@ public class BookController : ControllerBase
     public async Task<ActionResult<ApiResponse<string>>> AddBook([FromBody] AddBookRequest req)
     {
         var userID = User.GetUserId();
-        var books = await _bookService.GetBooks(userID);
+        var res = await _bookService.AddBook(userID, req);
 
-        return Ok(books);
+        if (res.StatusCode == 404)
+            return NotFound(res);
+        if (res.StatusCode == 400)
+            return BadRequest(res);
+
+        return Ok(res);
     }
 
     [HttpPut("UpdateBook")]

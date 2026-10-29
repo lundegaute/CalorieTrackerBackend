@@ -1,5 +1,7 @@
 ﻿
 
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace Shared.DTO;
 
 public class ApiResponse<T>
@@ -27,6 +29,17 @@ public class ApiResponse<T>
             Errors = errors,
             Types = types,
             StatusCode = statusCode
+        };
+    }
+
+    public static ApiResponse<T> NotFound(List<string> errors)
+    {
+        return new ApiResponse<T>
+        {
+            IsSuccess = false,
+            Errors = errors,
+            Types = ["Not Found"],
+            StatusCode = 404
         };
     }
 }

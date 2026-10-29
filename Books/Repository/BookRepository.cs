@@ -1,4 +1,5 @@
 ﻿using Books.DataContext;
+using Books.Helper;
 using Books.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,15 @@ public class BookRepository(BooksDataContext context)
         return books;
     }
 
+    public async Task<bool> AddBookAsync(Book book)
+    {
+        _context.Books.Add(book);
+        var changes = DatabaseTracker.Count<Book>(EntityState.Added, _context);
+        await _context.SaveChangesAsync();
+        return changes == 1;
+
+
+    }
 
 
 

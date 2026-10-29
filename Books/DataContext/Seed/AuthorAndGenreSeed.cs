@@ -7,9 +7,16 @@ public static class AuthorAndGenreSeed
 {
     public async static Task SeedDefaultData(BooksDataContext _context)
     {
-        List<string> genres = ["Fantasy", "Sci-Fi", "Crime", "Biography", "Non-fiction"];
+        List<string> genres = ["Fantasy", "Sci-Fi", "Crime", "Biography", "Non-fiction", "Unknown"];
         var authors = new List<Author>
         {
+            new Author
+            {
+                FirstName = "Unknown",
+                LastName = "Unknown",
+                Birth = null,
+                WebUrl = null
+            },
             new Author
             {
                 FirstName = "Brandon",
@@ -69,14 +76,15 @@ public static class AuthorAndGenreSeed
         };
     
 
-        var existingAuthors = await _context.Authors.ToListAsync();
+        var existingAuthors = await _context.Authors.Select(x => x.LastName).ToListAsync();
         var existingGenres = await _context.Genres.Select(x => x.Name).ToListAsync();
         foreach(var genre in genres.Except(existingGenres, StringComparer.OrdinalIgnoreCase)) {
             _context.Genres.Add( new Genre { Name = genre });
         }
-        foreach(var author in authors.Except(existingAuthors) )
+        foreach(var author in authors)
         {
-            _context.Authors.Add(author);
+            if ( !existingAuthors.Contains(author.LastName) )
+                _context.Authors.Add(author);
         }
         await _context.SaveChangesAsync();
 
@@ -100,13 +108,9 @@ public static class AuthorAndGenreSeed
                 ReleaseYear = 1999,
             };
             _context.Books.Add(GardensOfTheMoon);
+            await _context.SaveChangesAsync();
         }
-
-
-
-
-
-
+        
 
     }
 }

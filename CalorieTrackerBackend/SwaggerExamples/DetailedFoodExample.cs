@@ -1,4 +1,5 @@
-﻿using CalorieTracker.DTO.Requests.DetailedRequests;
+﻿using Books.DTO.Requests;
+using CalorieTracker.DTO.Requests.DetailedRequests;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace CalorieTracker.SwaggerExamples;

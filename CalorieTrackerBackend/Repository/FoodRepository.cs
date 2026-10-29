@@ -145,24 +145,6 @@ public class FoodRepository
             var foodConstUpdated = Count<FoodConstituent>(EntityState.Modified);
             var foodConstUnchanged = Count<FoodConstituent>(EntityState.Unchanged);
 
-            var knownIds = _context.ChangeTracker.Entries<Nutrient>()
-                .Select(e => e.Entity.NutrientId)
-                .ToHashSet();
-
-            // New constituents whose nutrient is neither in the DB nor being added
-            var missing = _context.ChangeTracker.Entries<FoodConstituent>()
-                .Where(e => e.State == EntityState.Added)
-                .Select(e => e.Entity.NutrientId)
-                .Where(id => !knownIds.Contains(id))
-                .Distinct()
-                .ToList();
-
-
-            Console.WriteLine($"Constituents with unknown nutrient: {string.Join(", ", missing)}");
-            if (missing.Count > 0)
-                throw new InvalidOperationException(
-                    $"Constituents reference unknown nutrients: {string.Join(", ", missing)}");
-
             await _context.SaveChangesAsync();
 
             return $"Detailed foods added: {foodsAdded} | Detailed foods modified: {foodsUpdated} | Detailed foods unchanged: {foodsUnchanged}" +

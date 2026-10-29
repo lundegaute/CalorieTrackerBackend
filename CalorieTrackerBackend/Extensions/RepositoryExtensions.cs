@@ -19,6 +19,8 @@ public static class RepositoryExtensions
         // Books Section
         #if HAS_BOOKS
                 services.AddScoped<BookRepository>();
+                services.AddScoped<AuthorRepository>();
+                services.AddScoped<GenreRepository>();
         #endif
 
 

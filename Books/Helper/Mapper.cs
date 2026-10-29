@@ -1,4 +1,5 @@
 ﻿using Books.DTO;
+using Books.DTO.Requests;
 using Books.Models;
 
 namespace Books.Helper;
@@ -29,6 +30,22 @@ public static class Mapper
             EndedReading = book.EndedReading,
             Pages = book.Pages,
             ReleaseYear = book.ReleaseYear,
+        };
+    }
+
+    public static Book MapBookRequestToBook(int userID, AddBookRequest req, int authorId, int genreId)
+    {
+        return new Book
+        {
+            UserId = userID,
+            Title = req.Title,
+            AuthorId = authorId,
+            GenreId = genreId,
+            Series = req.Series,
+            Pages = req.Pages,
+            ReleaseYear = req.ReleaseYear,
+            StartedReading = req.StartedReading,
+            EndedReading = req.EndedReading,
         };
     }
 }
