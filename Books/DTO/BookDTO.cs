@@ -18,10 +18,12 @@ public class BookDTO
     public DateOnly? StartedReading { get; set; }
     public DateOnly? EndedReading { get; set; }
     public int ReleaseYear { get; set; }
+    public string? Hex { get; set; }
 }
 
 public class AuthorDTO
 {
+    public required int AuthorId { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public DateOnly? Birth { get; set; }
@@ -30,5 +32,6 @@ public class AuthorDTO
 
 public class GenreDTO
 {
+    public required int GenreId { get; set; }
     public required string Name { get; set; }
 }

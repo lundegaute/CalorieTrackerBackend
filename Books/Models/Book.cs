@@ -18,6 +18,7 @@ public class Book : BaseModel
     public DateOnly? StartedReading { get; set; }
     public DateOnly? EndedReading { get; set; }
     public int ReleaseYear { get; set; }
+    public string? Hex { get; set; }
 }
 
 public class Author : BaseModel

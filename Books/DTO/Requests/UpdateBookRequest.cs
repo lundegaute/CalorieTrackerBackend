@@ -4,6 +4,7 @@ namespace Books.DTO.Requests;
 
 public class UpdateBookRequest
 {
+    public int BookId { get; set; }
     public string? Title { get; set; }
 
     public int AuthorId { get; set; }
@@ -11,7 +12,7 @@ public class UpdateBookRequest
 
     public string? Series { get; set; }
     public int? Pages { get; set; }
-    public DateTime? StartedReading { get; set; }
-    public DateTime? EndedReading { get; set; }
+    public DateOnly? StartedReading { get; set; }
+    public DateOnly? EndedReading { get; set; }
     public int? ReleaseYear { get; set; }
 } 

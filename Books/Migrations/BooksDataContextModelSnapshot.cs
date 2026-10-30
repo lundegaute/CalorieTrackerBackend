@@ -85,6 +85,9 @@ namespace Books.Migrations
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Hex")
+                        .HasColumnType("longtext");
+
                     b.Property<int>("Pages")
                         .HasColumnType("int");
 

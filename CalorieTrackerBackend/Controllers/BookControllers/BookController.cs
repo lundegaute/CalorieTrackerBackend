@@ -39,17 +39,16 @@ public class BookController : ControllerBase
             return NotFound(res);
         if (res.StatusCode == 400)
             return BadRequest(res);
-
         return Ok(res);
     }
 
     [HttpPut("UpdateBook")]
-    public async Task<ActionResult<ApiResponse<string>>> UpdateBook()
+    public async Task<ActionResult<ApiResponse<string>>> UpdateBook([FromBody] UpdateBookRequest req)
     {
         var userID = User.GetUserId();
-        var books = await _bookService.GetBooks(userID);
+        var res = await _bookService.UpdateBook(userID, req);
 
-        return Ok(books);
+        return Ok(res);
     }
 
     [HttpDelete("DeleteBook")]
@@ -61,7 +60,15 @@ public class BookController : ControllerBase
         return Ok(books);
     }
 
-
+    [HttpPost("UpdateHex")]
+    public async Task<ActionResult<ApiResponse<string>>> UpdateBookHexColor([FromBody] List<UpdateBookColorRequest> reqs)
+    {
+        var userID = User.GetUserId();
+        var res = await _bookService.UpdateBookColor(userID, reqs);
+        if (res.StatusCode == 404)
+            return NotFound(res);
+        return Ok(res);
+    }
 
 
 }

@@ -15,7 +15,7 @@ public class BookService(BookRepository bookRepository, AuthorRepository authorR
 
     public async Task<ApiResponse<List<BookDTO>>> GetBooks(int userID)
     {
-        var books = await _bookRepository.GetBooksAsync(userID);
+        var books = await _bookRepository.GetUsersBooksAsync(userID);
         var booksDto = books.Select(book => book.MapBookToBookDTO()).ToList();
 
         return ApiResponse<List<BookDTO>>.Success(booksDto, 200);
@@ -40,14 +40,33 @@ public class BookService(BookRepository bookRepository, AuthorRepository authorR
             return ApiResponse<string>.Failure(["Book was not added, try again"], ["Sql error"], 400);
     }
 
-    public async Task<ApiResponse<string>> UpdateBook()
+    public async Task<ApiResponse<string>> UpdateBook(int userID, UpdateBookRequest req)
     {
+        var book = await _bookRepository.GetBookAsync(userID, req.BookId);
+        if (book is null)
+            return ApiResponse<string>.NotFound(["Book not found"]);
 
-        return ApiResponse<string>.Success("Updating", 200);
+        var res = await _bookRepository.UpdateBookAsync(book, req);
+        return res;
     }
+
     public async Task<ApiResponse<string>> DeleteBook()
     {
+        return ApiResponse<string>.Success("Delete not implemented yet", 200);
+    }
 
-        return ApiResponse<string>.Success("Delete", 200);
+    public async Task<ApiResponse<string>> UpdateBookColor(int userID, List<UpdateBookColorRequest> reqs)
+    {
+        var bookIDs = reqs.Select(x => x.BookId).ToList();
+        var books = await _bookRepository.GetBooksAsync(userID, bookIDs);
+        if (books is null || books.Count == 0)
+            return ApiResponse<string>.NotFound(["No book found"]);
+
+        var reqDict = reqs.ToDictionary(x => x.BookId);
+        var changes = await _bookRepository.UpdateBookHexColor(books, reqDict);
+
+        return ApiResponse<string>.Success($"Colors changed: {changes}", 200);
+
+
     }
 }

@@ -15,6 +15,7 @@ public static class Mapper
             Title = book.Title,
             Author = new AuthorDTO
             {
+                AuthorId = book.Author.Id,
                 FirstName = book.Author?.FirstName ?? "Unknown",
                 LastName = book.Author?.LastName ?? "Unknown",
                 Birth = book.Author?.Birth ?? null,
@@ -23,6 +24,7 @@ public static class Mapper
             },
             Genre = new GenreDTO
             {
+                GenreId = book.Genre.Id,
                 Name = book.Genre?.Name ?? "Unknown",
             },
             Series = book.Series,
@@ -30,6 +32,7 @@ public static class Mapper
             EndedReading = book.EndedReading,
             Pages = book.Pages,
             ReleaseYear = book.ReleaseYear,
+            Hex = book.Hex,
         };
     }
 

@@ -24,6 +24,7 @@ public class BookConfig : BaseEntityConfiguration<Book>
         builder.Property(b => b.EndedReading);
 
         builder.Property(b => b.ReleaseYear);
+        builder.Property(b => b.Hex);
 
         // Relations
         builder.HasOne(b => b.Author)
