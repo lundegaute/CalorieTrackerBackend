@@ -29,7 +29,7 @@ public class BookController : ControllerBase
         return Ok(books);
     }
 
-    [HttpPost("AddBook")]
+    [HttpPost("Add")]
     public async Task<ActionResult<ApiResponse<string>>> AddBook([FromBody] AddBookRequest req)
     {
         var userID = User.GetUserId();
@@ -42,7 +42,7 @@ public class BookController : ControllerBase
         return Ok(res);
     }
 
-    [HttpPut("UpdateBook")]
+    [HttpPut("Update")]
     public async Task<ActionResult<ApiResponse<string>>> UpdateBook([FromBody] UpdateBookRequest req)
     {
         var userID = User.GetUserId();
@@ -51,7 +51,7 @@ public class BookController : ControllerBase
         return Ok(res);
     }
 
-    [HttpDelete("DeleteBook")]
+    [HttpDelete("Delete")]
     public async Task<ActionResult<ApiResponse<string>>> DeleteBook()
     {
         var userID = User.GetUserId();
